@@ -23,7 +23,9 @@ not run in this seed, it is omitted, not written as "none".
   line names which skill took each step so far, or says that none did.
 - `# Candidates` (`/katai:start-next` only) -- a table, one row per
   candidate, in the order they were offered:
-  `| candidate | source (path or item) | tree check (landed / blocked / ready) | verdict |`
+  `| candidate | source (path or item) | tree check (landed / blocked / ready / not read) | verdict |`
+  A candidate that the owner did not pick from a list of existing items is
+  `not read`.
 - `# Brief` -- prose for the owner to read, at most 200 words, no tables,
   no paths: the one section whose claims the sections below evidence
   instead of carrying paths themselves. Three paragraphs: what the unit is
