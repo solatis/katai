@@ -14,9 +14,6 @@ and only your own command opens the next one:
 The name is kata plus AI. katai is also a Japanese word for firm, rigid and
 stubborn, which describes an opinionated workflow well.
 
-**Status: this repository holds the plugin's frame. The skills behind the
-commands are not in it yet.**
-
 ## Install
 
 katai needs `git`, `gh` and `python3` on the `PATH`.
@@ -56,7 +53,8 @@ where it is in three steps:
 3. It hands a step to your own skills where one covers it. A stage says "create
    the tracker item the way this project does it", and a skill of yours whose
    description covers that tracker takes the step. Without such a skill katai
-   uses GitHub issues and milestones.
+   uses GitHub issues and milestones where the repository's history shows
+   them, and makes no tracker item where it shows no tracker.
 
 What none of the three says, katai asks you once and writes down as a plain
 sentence in the repository's instruction file.

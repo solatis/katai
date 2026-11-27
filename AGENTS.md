@@ -11,6 +11,20 @@ that change katai itself.
 - `.claude-plugin/marketplace.json` lists the plugin with `source: "./"`, so
   that `claude plugin install katai --marketplace <clone>` installs it from a
   clone and loads it from there.
+- `skills/` holds one folder per skill. `start`, `start-next`, `plan`, `build`
+  and `merge` are the commands the owner types. `workflow`, `seed`,
+  `postmortem`, `doc-discipline`, `doc-read` and `doc-audit` are loaded by
+  those and never typed.
+- `skills/workflow/SKILL.md` holds what every stage shares, and its "Changing
+  a rule" section holds for every change to a skill here.
+- `agents/doc-reader.md` is the read-only agent that `doc-read` and
+  `doc-audit` run on.
+- `scripts/repo_state.py` runs at the start of every stage and prints what
+  the stage needs to know about the repository. `scripts/step_check_prs.py`
+  runs at the start of the merge stage.
+- `skills/doc-discipline/scripts/` holds the step check and the part list
+  with their tests: `python3 -m unittest` in that folder.
+- `doc/adr/` holds katai's decision records.
 
 ## What may go into katai
 
