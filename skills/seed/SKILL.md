@@ -70,6 +70,7 @@ read whole before its step begins:
 3. `${CLAUDE_SKILL_DIR}/report.md`: the report, the two writes, then the
    wait.
 
-`/katai:start` runs the three in a row. `/katai:start-next` runs step 1 for
-the candidates before the owner chooses, and steps 2 and 3 for the chosen
-unit.
+`/katai:start` runs the three in a row. So does `/katai:start-next` for
+existing items, after the owner has chosen. Where it cuts its candidates
+from a milestone's goals, it runs step 1 for the candidates before the
+owner chooses, and steps 2 and 3 for the chosen unit.
