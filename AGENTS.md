@@ -9,9 +9,8 @@ that change katai itself.
 - `.claude-plugin/plugin.json` names the plugin. Its skills are typed
   `/katai:<skill>`.
 - `.claude-plugin/marketplace.json` lists the plugin with `source: "./"`, so
-  that Claude Code can install it from a clone.
-- `install.sh` installs the plugin from the clone it sits in, and
-  `install.sh --uninstall` removes it.
+  that `claude plugin install katai --marketplace <clone>` installs it from a
+  clone and loads it from there.
 
 ## What may go into katai
 
@@ -39,5 +38,5 @@ instruction file.
   lowercase, with no body.
 - A change reaches `main` through a pull request, and `main` moves by
   fast-forward.
-- Run `install.sh` against a scratch `CLAUDE_CONFIG_DIR` to try it without
-  touching a real configuration.
+- To try an install without touching a real configuration, run the install
+  command with `CLAUDE_CONFIG_DIR` set to a scratch directory.

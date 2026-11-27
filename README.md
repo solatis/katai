@@ -14,31 +14,35 @@ and only your own command opens the next one:
 The name is kata plus AI. katai is also a Japanese word for firm, rigid and
 stubborn, which describes an opinionated workflow well.
 
-**Status: this repository holds the plugin's frame and its install command.
-The skills behind the commands are not in it yet.**
+**Status: this repository holds the plugin's frame. The skills behind the
+commands are not in it yet.**
 
 ## Install
 
-katai needs `claude`, `git`, `gh` and `python3` on the `PATH`.
+katai needs `git`, `gh` and `python3` on the `PATH`.
 
 ```sh
 git clone https://github.com/solatis/katai.git
-katai/install.sh
+claude plugin install katai --marketplace "$PWD/katai"
 ```
 
 Claude Code then loads katai from that clone. An edit in the clone is what
 the next session runs, and a running session takes it after `/reload-plugins`.
 
-The install command does two things:
+katai keeps its plans under `~/.local/state/katai`, outside every checkout, so
+that a cleared session and a linked worktree find them. In the default
+permission mode Claude Code asks before each read outside the working
+directory. To stop that, list the folder under
+`permissions.additionalDirectories` in your user settings.
 
-- It runs `claude plugin install katai --marketplace <clone>`.
-- It adds the clone and `~/.local/state/katai` to
-  `permissions.additionalDirectories` in your user settings. katai keeps its
-  plans under `~/.local/state/katai`, outside every checkout, so that a
-  cleared session and a linked worktree find them.
+To remove katai:
 
-`katai/install.sh --uninstall` removes both again. It leaves your plans and
-the clone alone.
+```sh
+claude plugin uninstall katai@katai
+claude plugin marketplace remove katai
+```
+
+Your plans and the clone stay.
 
 ## How katai fits a repository
 
