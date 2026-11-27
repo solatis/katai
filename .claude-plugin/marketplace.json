@@ -1,0 +1,13 @@
+{
+  "name": "katai",
+  "owner": {
+    "name": "solatis"
+  },
+  "plugins": [
+    {
+      "name": "katai",
+      "source": "./",
+      "description": "A staged workflow for Claude Code: start, plan, build and merge, with the owner's command as the gate between stages."
+    }
+  ]
+}
