@@ -394,6 +394,26 @@ conversation.
 - An earlier approval is read back from the plan's `Status:` and from the
   owner's review channel, never from memory of having seen it.
 
+## Output
+
+What you write costs the owner reading time and the session tokens.
+
+- Between tool calls, write nothing, or one line that says what you found
+  or decided. Do not announce a step before you run it, and do not repeat a
+  result that the tool's output already shows.
+- In that text, do not restate the printed lines, a plan, the seed report
+  or a skill's text. Name the line, the section or the path.
+- A message for the owner, such as a question, a review or a stage's
+  message, is read on its own, because the owner may not have read the rest
+  of the session. It repeats what the owner needs to follow it, and leaves
+  out what the owner does not need.
+- A message whose form a stage fixes holds that form, with nothing before
+  it and nothing after it.
+- Read a file once, and again only when it changed.
+
+None of this shortens what a rule asks for: a question keeps its context, a
+review its lists, a plan its sections and a comment its reason.
+
 ## Lifecycle
 
 Five commands move a unit through four stages: `/katai:start` or
