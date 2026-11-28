@@ -7,16 +7,16 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py")
 
 !`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"`
 
-# /katai:start-next -- seed the next unit, chosen with the owner
+# /kt:start-next -- seed the next unit, chosen with the owner
 
-Load `katai:workflow` with the Skill tool before anything else. The lines
+Load `kt:workflow` with the Skill tool before anything else. The lines
 above are what the stage printed; read them as its "What the stage printed"
 says. Where they hold `no repository of its own`, `no main checkout (bare)`
 or `no GitHub origin`, say so and stop.
 
 This skill takes no argument. You find the candidates, let the owner choose
 which of them form the unit, and then seed that unit exactly as
-`/katai:start` would have, had the owner named those items or described
+`/kt:start` would have, had the owner named those items or described
 that work.
 
 ## This turn
@@ -30,7 +30,7 @@ branches, make no commits and delete nothing.
 ## Steps
 
 1. Detect, from the printed lines: what is in flight and the leftovers, as
-   `katai:workflow`, "In flight and leftovers", defines them. Each kind of
+   `kt:workflow`, "In flight and leftovers", defines them. Each kind of
    leftover is one line with its count and its names, for the report's
    Open questions.
 2. Find the candidates. A sentence of the instruction files or of the local
@@ -46,33 +46,33 @@ branches, make no commits and delete nothing.
      repository's tracker, use it for this step. The stage keeps the order
      of the steps and the gates; the skill supplies how the step is done.
      Where no skill covers it, the tracker evidence decides, as
-     `katai:workflow`, "Units and issues", reads it. With GitHub issues, the
+     `kt:workflow`, "Units and issues", reads it. With GitHub issues, the
      owner's unstarted items are the open issues assigned to the owner
      (`gh issue list --state open --assignee @me --json number,title,milestone`)
      that no plan and no open pull request names. With another tracker's
      keys and no skill, those items cannot be read: say so in the question.
      With no tracker, there are none.
 3. Prepare the candidates for the question.
-   - Candidates cut from goals: load `katai:seed` with the Skill tool, with
+   - Candidates cut from goals: load `kt:seed` with the Skill tool, with
      the candidates that are not in flight as the unit, and run its context
      step only. Return here before shaping anything. Then Check and cut,
      below.
-   - Existing items: Triage, below. Do not load `katai:seed`, and read no
+   - Existing items: Triage, below. Do not load `kt:seed`, and read no
      code, before the owner has picked.
 4. Ask, below. The owner's pick is the unit.
 5. For picked work in flight: one line per issue with its stage and the
-   next command, from the table in `katai:workflow`, "In flight and
+   next command, from the table in `kt:workflow`, "In flight and
    leftovers", before anything else in the reply. Where the pick holds
    nothing else, that is the whole reply, and nothing opens a stage. For
    the rest of the pick, where step 3 ran the context step: the rest of
-   `katai:seed`, that is the shape, the challenge round, the report and the
-   wait for `/katai:plan`. Where step 3 did not: load `katai:seed` with the
+   `kt:seed`, that is the shape, the challenge round, the report and the
+   wait for `/kt:plan`. Where step 3 did not: load `kt:seed` with the
    Skill tool, with the pick as the unit, and run all of it, as
-   `/katai:start` does for the items or the work the owner names. The
+   `/kt:start` does for the items or the work the owner names. The
    report's Candidates section is present, because steps 2 and 4 ran.
 
 With no candidate at all, ask the owner what to work on. The answer is a
-description, and you seed it as `/katai:start` seeds one.
+description, and you seed it as `/kt:start` seeds one.
 
 Name in the report's Where which skill read the tracker, or that none did.
 
@@ -93,7 +93,7 @@ subject; mergeable on its own, so that the base builds and passes lint and
 tests after it lands; exercised by a test or a command that exists when it
 lands. The size of an issue is the length of its commit list, so first
 write each candidate's whole commit list, at the granularity
-`katai:workflow`, "Branches and commits", prescribes, from the context step.
+`kt:workflow`, "Branches and commits", prescribes, from the context step.
 A candidate too large to review as one change is split into issues at the
 points where the base stays green. A small candidate is offered as it is,
 or folded into a candidate on the same subject where the owner would review

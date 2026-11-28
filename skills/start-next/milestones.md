@@ -51,7 +51,7 @@ Work through these steps in order; each one feeds the next.
    (`gh api repos/{owner}/{repo}/milestones/<n>`). The goals are `owner` by
    provenance where the repository's instruction file names milestone goals
    among the owner's sources, and `agent` otherwise. Any mechanism the description
-   names beyond the goal is `agent`, as `katai:seed` classifies it.
+   names beyond the goal is `agent`, as `kt:seed` classifies it.
 3. The tree against the goals. For each goal, check what the tree already
    delivers: the directories, the code, the tests, `git log`. A goal the
    tree meets is met; say so with the evidence.

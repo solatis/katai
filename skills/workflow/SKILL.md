@@ -38,7 +38,7 @@ repository. The owner's instructions are all of these.
   on that issue's branch, and its plan's `Base:` names that branch. An
   independent issue can merge alone. Stacking works with every tracker.
 - An existing tracker item that the owner names, or picks in
-  `/katai:start-next`, is the unit's issue. The seed report and the plan
+  `/kt:start-next`, is the unit's issue. The seed report and the plan
   mark it `existing`, and the plan creates nothing for it. At the merge, a
   GitHub issue is closed by the pull request that lands it, whoever made
   it, because one issue is one pull request. An item of another tracker may
@@ -46,7 +46,7 @@ repository. The owner's instructions are all of these.
   covers the tracker: the stage tells that skill whether the unit made the
   item, and the skill closes it or leaves it by its own rule.
 - Where the repository uses GitHub milestones, a milestone holds goals and
-  never a plan. `/katai:start-next` cuts issues from what the active
+  never a plan. `/kt:start-next` cuts issues from what the active
   milestone's goals still need, as its `milestones.md` says. An issue
   without a milestone is free-form work and is equally valid.
 
@@ -257,16 +257,16 @@ request, read it with
 The review state comes from the plan's `Status:` and from the owner's review
 channel ("Asking and reviews").
 
-| The plans folder, the tree and GitHub show                            | Stage                     | Next                                                           |
-| --------------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------- |
-| a seed report, and no plan names its unit                             | plan waits                | `/katai:plan`                                                  |
-| plan `Status: draft`                                                  | plan, review not approved | `/katai:plan`, which resumes at the review                     |
-| plan `Status: approved`, no branch                                    | build waits               | `/katai:build <item>`                                          |
-| a branch with commits, no pull request                                | build, partly landed      | the owner decides; `/katai:build` stops for that issue         |
-| pull request open, its checks not passed or its head not approved     | build, checks and review  | `/katai:build <item>`, which resumes at the checks and reviews |
-| pull request open, its checks passed, the review of its head approved | merge waits               | `/katai:merge <item>`, after the owner reads the diff          |
-| pull request merged, plan still present                               | merged outside the stages | `/katai:merge <item>`, which runs what is left                 |
-| an open pull request of the owner that no plan names                  | outside the stages        | the owner decides                                              |
+| The plans folder, the tree and GitHub show                            | Stage                     | Next                                                        |
+| --------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------- |
+| a seed report, and no plan names its unit                             | plan waits                | `/kt:plan`                                                  |
+| plan `Status: draft`                                                  | plan, review not approved | `/kt:plan`, which resumes at the review                     |
+| plan `Status: approved`, no branch                                    | build waits               | `/kt:build <item>`                                          |
+| a branch with commits, no pull request                                | build, partly landed      | the owner decides; `/kt:build` stops for that issue         |
+| pull request open, its checks not passed or its head not approved     | build, checks and review  | `/kt:build <item>`, which resumes at the checks and reviews |
+| pull request open, its checks passed, the review of its head approved | merge waits               | `/kt:merge <item>`, after the owner reads the diff          |
+| pull request merged, plan still present                               | merged outside the stages | `/kt:merge <item>`, which runs what is left                 |
+| an open pull request of the owner that no plan names                  | outside the stages        | the owner decides                                           |
 
 `<item>` is the item on the plan's `Item:` line, without the word
 `existing`, or the issue's slug where `Item:` says `none`.
@@ -416,29 +416,29 @@ review its lists, a plan its sections and a comment its reason.
 
 ## Lifecycle
 
-Five commands move a unit through four stages: `/katai:start` or
-`/katai:start-next` (the seed), `/katai:plan`, `/katai:build` and
-`/katai:merge`. A stage opens only when the owner types its command, and
+Five commands move a unit through four stages: `/kt:start` or
+`/kt:start-next` (the seed), `/kt:plan`, `/kt:build` and
+`/kt:merge`. A stage opens only when the owner types its command, and
 that invocation is the gate. A chat message ("go", "ok", "yes", "proceed",
 "ship it", a thumbs up) opens no stage, whatever its wording: it answers a
 question inside the current stage, or it is a remark on what the current
 stage produced. An approval of a review approves that review and opens no
 stage either.
 
-| Stage    | Opened by                                                  | You produce                                                                                                                                                                                                                                                                                                                                                                              | You never                                                                                                                            | Ends with                                               |
-| -------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| 1. Seed  | `/katai:start <description or items>`, `/katai:start-next` | the seed report in the plans folder and in the conversation; on the first unit in a shared repository, the orientation in the local note; in `/katai:start-next`, the close of a met milestone where `milestones.md` allows it                                                                                                                                                           | write plans, create tracker items, branch, commit, or write any other file                                                           | a wait for `/katai:plan`                                |
-| 2. Plan  | `/katai:plan`                                              | the tracker items that do not exist yet, one plan per issue that passes the step check, the values asked once in the local note or, where own, in the first plan's Knowledge section, the review of all plans, and on approval `Status: approved` in each and the seed report deleted                                                                                                    | touch code, tests, config or any tracked file; branch; commit                                                                        | the plan-stage message, then a wait for `/katai:build`  |
-| 3. Build | `/katai:build [item ...]`                                  | per issue: the branch, the plan's commits, the comment checks, the push, the pull request, its CI, the other reviewers' comments put to the owner, and one review per pull request                                                                                                                                                                                                       | merge; deviate from a plan without saying so; invent a reason for a comment                                                          | the build-stage message, then a wait for `/katai:merge` |
-| 4. Merge | `/katai:merge [item ...]`                                  | per pull request, bottom of a stack first: the landing in the repository's merge style, the release lines of `Lands on:`, the item closed or left as "Units and issues" says, the plan deleted, the milestone closed where the pull request completed it; after the last pull request of a unit, the lessons the owner picked and the record of the approved draft in the lessons folder | merge a head that is not the reviewed head, or one that GitHub would not accept; merge without the owner having typed `/katai:merge` | one line per merged pull request                        |
+| Stage    | Opened by                                            | You produce                                                                                                                                                                                                                                                                                                                                                                              | You never                                                                                                                         | Ends with                                            |
+| -------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 1. Seed  | `/kt:start <description or items>`, `/kt:start-next` | the seed report in the plans folder and in the conversation; on the first unit in a shared repository, the orientation in the local note; in `/kt:start-next`, the close of a met milestone where `milestones.md` allows it                                                                                                                                                              | write plans, create tracker items, branch, commit, or write any other file                                                        | a wait for `/kt:plan`                                |
+| 2. Plan  | `/kt:plan`                                           | the tracker items that do not exist yet, one plan per issue that passes the step check, the values asked once in the local note or, where own, in the first plan's Knowledge section, the review of all plans, and on approval `Status: approved` in each and the seed report deleted                                                                                                    | touch code, tests, config or any tracked file; branch; commit                                                                     | the plan-stage message, then a wait for `/kt:build`  |
+| 3. Build | `/kt:build [item ...]`                               | per issue: the branch, the plan's commits, the comment checks, the push, the pull request, its CI, the other reviewers' comments put to the owner, and one review per pull request                                                                                                                                                                                                       | merge; deviate from a plan without saying so; invent a reason for a comment                                                       | the build-stage message, then a wait for `/kt:merge` |
+| 4. Merge | `/kt:merge [item ...]`                               | per pull request, bottom of a stack first: the landing in the repository's merge style, the release lines of `Lands on:`, the item closed or left as "Units and issues" says, the plan deleted, the milestone closed where the pull request completed it; after the last pull request of a unit, the lessons the owner picked and the record of the approved draft in the lessons folder | merge a head that is not the reviewed head, or one that GitHub would not accept; merge without the owner having typed `/kt:merge` | one line per merged pull request                     |
 
 A session may begin at any stage, from the plans folder, the tree and
-GitHub. `/katai:start` with no argument reports where each plan stands and
-names the next command; it opens nothing. `/katai:build` and `/katai:merge`
+GitHub. `/kt:start` with no argument reports where each plan stands and
+names the next command; it opens nothing. `/kt:build` and `/kt:merge`
 take the plans and GitHub as their whole input and need no seed or plan
 conversation.
 
-Stages apply per issue. The owner may open `/katai:merge #12` while `#13` is
+Stages apply per issue. The owner may open `/kt:merge #12` while `#13` is
 still in review; a stage never waits for the rest of its unit.
 
 Open questions the owner left unanswered are not answered by a stage
@@ -450,11 +450,11 @@ A request in plain words that the owner's own configuration covers, such as
 a merge asked for in the chat, runs by that configuration's rules, outside
 the stages: the plan's `Lands on:` does not bind it, and the stage's checks
 do not run. A stage that later finds a plan whose pull request merged that
-way reports "merged outside the stages", and `/katai:merge <item>` runs what
+way reports "merged outside the stages", and `/kt:merge <item>` runs what
 is left.
 
 Correct: the seed report is shown and the owner writes "sounds right". You
-answer that you are waiting for `/katai:plan`, and do nothing else.
+answer that you are waiting for `/kt:plan`, and do nothing else.
 
 Incorrect: the seed report is shown, the owner writes "go", and you create
 the items and write the plans, because "go" sounded like the gate. Or: the

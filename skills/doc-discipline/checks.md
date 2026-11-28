@@ -17,7 +17,7 @@ Where the stage printed `owner: own`, every check covers whole files.
 - The step check runs with `--lines <base>...HEAD`, in steps 1 and 6.
 - A reader's stop on a line that the change does not touch is declined with
   the reason "outside the change", in step 3.
-- `katai:doc-audit` gets the token `lines` after the range, in step 5.
+- `kt:doc-audit` gets the token `lines` after the range, in step 5.
 - A comment block that another author wrote, as `git blame` shows, is not
   rewritten whole. A finding in it is listed under "Comment checks" in the
   review and left as it is. Rule 13 of "Code comments" in `rules.md`, which
@@ -46,7 +46,7 @@ Where the stage printed `owner: own`, every check covers whole files.
 
 2. Run `scripts/change_parts.py` under the base directory with `python3`
    over `<base>...HEAD`. It prints the parts of the change, about 300 changed
-   lines each. Then call `katai:doc-read <base>...HEAD <part>` once for each
+   lines each. Then call `kt:doc-read <base>...HEAD <part>` once for each
    part, with the range and the part number and no other word. The calls may
    run side by side. Save the answers verbatim in the order of the parts. A
    reader that gets a large change whole spreads its attention thin and
@@ -69,11 +69,11 @@ Where the stage printed `owner: own`, every check covers whole files.
 
 4. When step 3 changed a comment, a document or the code, run a second
    round. In it, list the parts of `<head>...HEAD` with the head you noted in
-   step 3, and call `katai:doc-read <head>...HEAD <part>` for each part as in
+   step 3, and call `kt:doc-read <head>...HEAD <part>` for each part as in
    step 2, so that the new readers read what step 3 changed. Save their
    answers and close their stops as in step 3. No third round follows.
-5. Run `katai:doc-audit <base>...HEAD plan: <plan>` when the change has a
-   plan, and `katai:doc-audit <base>...HEAD` when it has none. Held to the
+5. Run `kt:doc-audit <base>...HEAD plan: <plan>` when the change has a
+   plan, and `kt:doc-audit <base>...HEAD` when it has none. Held to the
    owner's lines, the word `lines` follows the range. Where the plan names a
    document that the change did not change, such as the local note, its
    path follows `also:`. Save the report verbatim. Apply
@@ -107,7 +107,7 @@ reports a check without the saved answer reports a check that did not run.
 ## Examples
 
 Correct: the session lists two parts of `main...HEAD`, runs
-`katai:doc-read main...HEAD 1` and `katai:doc-read main...HEAD 2`, saves the
+`kt:doc-read main...HEAD 1` and `kt:doc-read main...HEAD 2`, saves the
 answers with twelve stops, renames one variable, writes nine notes from the
 code and the tests, asks the owner about a constant, and declines one stop
 because the standard library defines the term. The reader of the second round
@@ -127,8 +127,8 @@ row as a finding left in a block of another author.
 Incorrect: the session reads its own comments again and reports that it
 found no gaps. It already knows what each line does, so it cannot see where
 a reader stops. Or the session adds a hint to the call, such as
-`katai:doc-read main...HEAD 1 the parser is the risky part`. A hint tells the
-reader what the author knows, and `katai:doc-read` passes the range and the
+`kt:doc-read main...HEAD 1 the parser is the risky part`. A hint tells the
+reader what the author knows, and `kt:doc-read` passes the range and the
 part number alone to the reader. Or the session asks a subagent to write the
 missing comments. The subagent does not know the reasons, so it writes
 paraphrases and guesses.

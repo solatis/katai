@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "katai",
+      "name": "kt",
       "source": "./",
       "description": "A staged workflow for Claude Code: start, plan, build and merge, with the owner's command as the gate between stages."
     }

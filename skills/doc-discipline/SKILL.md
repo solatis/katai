@@ -54,15 +54,15 @@ Where the repository has no "Documentation strategy":
 
 ## Files
 
-| File                      | Read it                                                                                            |
-| ------------------------- | -------------------------------------------------------------------------------------------------- |
-| `rules.md`                | before anything else: the rules for comments and prose                                             |
-| `narrative.md`            | before you write or change code, or the sketches of a plan                                         |
-| `placement.md`            | before you write or move a document, or a comment that holds knowledge                             |
-| `names.md`                | before you name a type, a trait, a function, a field, a module or a file                           |
-| `checks.md`               | after a change is complete, before it leaves the session                                           |
-| `scripts/check_steps.py`  | the step check: it checks walkthrough numbers, back-references and denied marks                    |
-| `scripts/change_parts.py` | the part list: it splits a change, or the files under given paths, into parts for `katai:doc-read` |
+| File                      | Read it                                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| `rules.md`                | before anything else: the rules for comments and prose                                          |
+| `narrative.md`            | before you write or change code, or the sketches of a plan                                      |
+| `placement.md`            | before you write or move a document, or a comment that holds knowledge                          |
+| `names.md`                | before you name a type, a trait, a function, a field, a module or a file                        |
+| `checks.md`               | after a change is complete, before it leaves the session                                        |
+| `scripts/check_steps.py`  | the step check: it checks walkthrough numbers, back-references and denied marks                 |
+| `scripts/change_parts.py` | the part list: it splits a change, or the files under given paths, into parts for `kt:doc-read` |
 
 ## The scripts
 
@@ -91,14 +91,14 @@ finding.
 
 ## The two checks that run in a subagent
 
-Two companion skills, `katai:doc-read` and `katai:doc-audit`, run in a
-subagent of their own on the agent `katai:doc-reader`. Call each through the
+Two companion skills, `kt:doc-read` and `kt:doc-audit`, run in a
+subagent of their own on the agent `kt:doc-reader`. Call each through the
 Skill tool, with the words after its name as its arguments. The subagent sees
 none of the conversation, and its last message comes back to the caller. The
 skill passes its first words to a script, so each of them is one plain word
 without quotes or spaces.
 
-- `katai:doc-read` takes the range of a change, or one or more paths joined
+- `kt:doc-read` takes the range of a change, or one or more paths joined
   by commas, and the number of one part, and nothing else. For paths, the
   parts hold the tracked files under them whole. The script leaves out the
   files it also leaves out of a range, such as lock files and binary files.
@@ -112,16 +112,16 @@ without quotes or spaces.
   does, each sentence it had to untangle, each term the code defines that a
   comment uses before any comment explains it, and each term or statement in
   a document it could not place.
-- `katai:doc-audit <scope> [lines] [plan: <plan>] [focus: ...] [also: ...]`
+- `kt:doc-audit <scope> [lines] [plan: <plan>] [focus: ...] [also: ...]`
   takes a range or one path. `lines` holds it to the lines the change adds or
   rewrites. It may also take a plan to reconcile against, a focus that limits
   the checks, and the paths of documents that belong to the task, which the
   subagent reads itself. It returns the report of the "Report" section below,
   with each change it proposes as a row.
 
-The caller of `katai:doc-read` passes the range or the paths and the part
+The caller of `kt:doc-read` passes the range or the paths and the part
 number alone, because the reader is useful only while it does not know what
-the author knows. The caller of `katai:doc-audit` adds facts about the task,
+the author knows. The caller of `kt:doc-audit` adds facts about the task,
 and never its view of the result.
 
 ## Held to the owner's lines
@@ -131,7 +131,7 @@ the change adds or rewrites. Where it printed `owner: own`, every check covers
 whole files. "Held to the owner's lines" in `checks.md` says how each check
 is held to those lines: the step check takes `--lines <base>...HEAD`, a
 reader's stop on a line the change does not touch is declined with that
-reason, and `katai:doc-audit` gets the token `lines`. A comment block that
+reason, and `kt:doc-audit` gets the token `lines`. A comment block that
 another author wrote is not rewritten whole. A finding in it is listed in the
 review's "Comment checks" and left. Rule 13 of "Code comments", which
 rewrites a touched block whole, holds for the owner's own blocks.
@@ -155,7 +155,7 @@ an agent that has no tool that writes, so they cannot change a file.
 2. Never invent rationale. A comment may only state what you verified from the
    code, the tests, the docs you are moving, or git history. If the "why" is
    unknown, write the "what" and ask the owner for the reason.
-   `katai:doc-audit` lists the gap under "Rationale unknown" as a question.
+   `kt:doc-audit` lists the gap under "Rationale unknown" as a question.
    Every "why" you intend to write names its evidence in the plan table of
    `narrative.md` or `placement.md`: a `file:line`, a test, the passage being
    moved, or a commit. The evidence stays in the plan; it does not go into
@@ -185,8 +185,8 @@ works as follows:
 1. Read `rules.md` and the repository's policy files. If the root `AGENTS.md`
    has no "Documentation strategy" section, stop and say so; the repair runs
    only where the repository has one.
-2. Run `katai:doc-audit <path>` for one component directory at a time, leaf
-   directories first. Several `katai:doc-audit` calls for independent
+2. Run `kt:doc-audit <path>` for one component directory at a time, leaf
+   directories first. Several `kt:doc-audit` calls for independent
    components may run side by side. Keep each report as it came back.
 3. Apply each report row by row. Write a reason only from the evidence its
    row names, or from evidence you find yourself. Ask the owner for each
@@ -201,7 +201,7 @@ works as follows:
 5. Follow `checks.md` over the commits of the repair, with one difference in
    the first reader round, which is step 2 of `checks.md`. Where that step
    lists the parts of the range of the change, a repair lists the parts of the
-   paths that it gave to `katai:doc-audit`, so that a reader also reads the
+   paths that it gave to `kt:doc-audit`, so that a reader also reads the
    functions that the repair left as they were. The second reader round, step
    4 of `checks.md`, reads its range as `checks.md` says.
 6. Report, in the form of the "Report" section, with the rows applied and
@@ -212,7 +212,7 @@ works as follows:
 A plan document says what the comments and documents were going to be,
 written while the reasons were still in context; the code says what they
 became. The gap between the two is where reasons get lost, because the plan
-is deleted once its work lands. `katai:doc-audit` follows these steps when
+is deleted once its work lands. `kt:doc-audit` follows these steps when
 its caller names a plan:
 
 1. Collect every promise the plan makes about prose: each claim in the
@@ -237,7 +237,7 @@ its caller names a plan:
 
 ## Report
 
-Keep the report short, and list its rows. `katai:doc-audit` writes the Run
+Keep the report short, and list its rows. `kt:doc-audit` writes the Run
 line first, then its plan tables, then each other section as proposed
 changes. A session that repairs code writes each section as changes made.
 

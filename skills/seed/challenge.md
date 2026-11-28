@@ -83,7 +83,7 @@ value they give is not asked.
   wins there.
 - Any other value a later step needs that nothing gives.
 
-In `/katai:start-next`, `milestones.md` may have asked the order of the
+In `/kt:start-next`, `milestones.md` may have asked the order of the
 milestones already. That answer is carried into the report like the others
 and is not asked again.
 

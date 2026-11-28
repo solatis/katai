@@ -8,9 +8,9 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py")
 
 !`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"`
 
-# /katai:plan -- the plan stage
+# /kt:plan -- the plan stage
 
-Load `katai:workflow` through the Skill tool first. This stage opens on this
+Load `kt:workflow` through the Skill tool first. This stage opens on this
 invocation and only this invocation. It creates tracker items, writes plans
 in the plans folder and writes down the values asked once. It changes no
 tracked file, creates no branch and makes no commit.
@@ -28,7 +28,7 @@ holds for the review this stage shows.
 ## Entry check
 
 The script's output above, the plans folder it names and GitHub are the
-state, read as `katai:workflow`, "What the stage printed", says. The
+state, read as `kt:workflow`, "What the stage printed", says. The
 conversation is no source of state, so the stage runs the same in a cleared
 session, from any checkout and from a linked worktree.
 
@@ -89,14 +89,14 @@ the stage only through that print.
    makes nothing for it. An issue a redirect adds gets its item here too,
    with the title its plan gives. Note each item made. A branch name or a
    pull request title of the seed report that holds the item's key as a
-   placeholder gets the key now, as `katai:workflow`, "Names", says.
+   placeholder gets the key now, as `kt:workflow`, "Names", says.
 
-2. Load `katai:doc-discipline` through the Skill tool, and read its
+2. Load `kt:doc-discipline` through the Skill tool, and read its
    `narrative.md` and `placement.md`.
 3. Read `${CLAUDE_SKILL_DIR}/plan-shape.md`, and write one plan per
    issue, `<slug>-plan.md` in the folder of the `plans:` line, in that
    shape, with `Status: draft`. Create the folder when it is missing. The
-   header lines are those of `katai:workflow`, "Plans", in its order:
+   header lines are those of `kt:workflow`, "Plans", in its order:
    - `Item:` the item step 1 made; `existing` and the item, for an item the
      unit did not make; or `none`, where the plan is the item.
    - `Unit:`, `Branch:`, `Base:` and `PR title:` as the seed report fixed
@@ -148,7 +148,7 @@ the stage only through that print.
    commits deliver.
 
    Run the step check on each plan, with the base directory that the loaded
-   `katai:doc-discipline` shows:
+   `kt:doc-discipline` shows:
 
    ```
    python3 <doc-discipline base directory>/scripts/check_steps.py --markdown <plans folder>/<slug>-plan.md
@@ -198,7 +198,7 @@ the stage only through that print.
      without a second review. Change each plan's `Status:` line from
      `draft` to `approved`, so that a cleared session reads them as
      approved, and delete the seed report. Then post the plan-stage message
-     and wait. The build stage opens when the owner invokes `/katai:build`.
+     and wait. The build stage opens when the owner invokes `/kt:build`.
    - A reply that does not approve is a redirect, also when it only asks
      something back. Answer what it asks, and fold every point of it into
      the plans it concerns. An issue it adds gets its item by step 1 and its
@@ -214,7 +214,7 @@ such as "tracker: <skill> <step>", "tracker: gh issue create" or "tracker:
 none"; the owner's remarks quoted, if any, with how the plans now honor
 them; the sentences step 4 wrote, with where; the open questions the plans
 recorded, each with the recommendation the approval has now settled; one
-line saying the build waits for `/katai:build`.
+line saying the build waits for `/kt:build`.
 
 Correct: the seed report names two issues, `cache-expiry` and
 `cache-metrics`, which stacks on it. The repository's history shows GitHub

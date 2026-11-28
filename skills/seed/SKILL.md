@@ -1,13 +1,13 @@
 ---
 name: seed
-description: Seeds one unit of katai work -- loads its context, puts its design choices to the owner and writes the seed report. Loaded by katai:start and katai:start-next after they have fixed the unit; never invoked by the owner.
+description: Seeds one unit of katai work -- loads its context, puts its design choices to the owner and writes the seed report. Loaded by kt:start and kt:start-next after they have fixed the unit; never invoked by the owner.
 user-invocable: false
 ---
 
 # Seed a unit
 
 The caller has fixed the unit: the work the owner described, the items the
-owner named, or the ones the owner chose in `/katai:start-next`. This skill
+owner named, or the ones the owner chose in `/kt:start-next`. This skill
 turns them into the seed report and stops. It works from the lines the
 stage printed. It reads and reports, and it writes two things only: the
 seed report in the plans folder, and on the first unit in a shared
@@ -26,7 +26,7 @@ and carry the class through the steps and into the report:
 - `owner`: the owner stated it. The owner's words in this session; a
   sentence of the local note that records an answer of the owner; and the
   documents and marks that the repository's instruction file
-  (`katai:workflow`, "Own and shared") names as the owner's sources, such as
+  (`kt:workflow`, "Own and shared") names as the owner's sources, such as
   the heading of a principle, the goals of an open milestone, a decision
   record that carries an owner's mark, or a row marked "owner, <date>".
   Where that file names no such source, only the first two count.
@@ -70,7 +70,7 @@ read whole before its step begins:
 3. `${CLAUDE_SKILL_DIR}/report.md`: the report, the two writes, then the
    wait.
 
-`/katai:start` runs the three in a row. So does `/katai:start-next` for
+`/kt:start` runs the three in a row. So does `/kt:start-next` for
 existing items, after the owner has chosen. Where it cuts its candidates
 from a milestone's goals, it runs step 1 for the candidates before the
 owner chooses, and steps 2 and 3 for the chosen unit.

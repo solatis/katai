@@ -10,9 +10,9 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"), Bash
 
 !`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/step_check_prs.py"`
 
-# /katai:merge -- the merge stage
+# /kt:merge -- the merge stage
 
-Load `katai:workflow` through the Skill tool first. An argument, when the
+Load `kt:workflow` through the Skill tool first. An argument, when the
 owner gave one, is:
 
 <issues>
@@ -32,7 +32,7 @@ this session names. With neither, stop and ask the owner which.
 The state comes from the two scripts' output above, the plans folder and
 GitHub, never from the conversation: a build-stage message that says green
 is a claim, and GitHub is the evidence. Read the script's lines as
-`katai:workflow`, "What the stage printed", says. The second script prints,
+`kt:workflow`, "What the stage printed", says. The second script prints,
 for each of the owner's open pull requests, the last line of the step check
 over `origin/<base>...origin/<head>`, held to the change's lines where the
 repository is shared.
@@ -219,7 +219,7 @@ line, which holds from any checkout. List the plans folder again after step
 5, because the script's list is from the start of the stage. After the last
 pull request of this run, do this for each unit that this run completed:
 
-1. Load `katai:postmortem` through the Skill tool with the unit's slug,
+1. Load `kt:postmortem` through the Skill tool with the unit's slug,
    taken from the plans, and the word `candidates` as its arguments, and no
    other word. The skill runs in a fork of its own, which has not seen this
    session and prints the repository's state for itself. It returns the
@@ -243,7 +243,7 @@ pull request of this run, do this for each unit that this run completed:
    the owner picked none, write `<lessons>/<unit>.md` with the header lines
    of the candidates, `Picked: none`, and the lessons as one line each under
    "Not picked", and go to step 9.
-6. Load `katai:postmortem` again with the unit's slug and the word `draft`.
+6. Load `kt:postmortem` again with the unit's slug and the word `draft`.
    It returns the draft of the record.
 7. Show the draft for review. A redirect is folded in: apply the owner's
    words to the draft, or where they change which lessons are picked,
@@ -294,7 +294,7 @@ the `merge:` line says squash, and you also read `fast-forward.md` to be
 safe and rebase the branch. Or: you check out the release line in this
 checkout to pick onto it, and the checkout fails because another worktree
 holds the line. Or: a colleague left two unresolved threads, and you
-resolve them before the merge. Or: you tell `katai:postmortem` which remarks
+resolve them before the merge. Or: you tell `kt:postmortem` which remarks
 you think matter, so the postmortem sorts them the way the session that
 built the code sees them. Or: the record names a class whose home is katai,
 and you edit katai's skills from this repository, or ask the owner whether

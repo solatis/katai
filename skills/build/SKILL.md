@@ -8,9 +8,9 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py")
 
 !`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"`
 
-# /katai:build -- the build stage
+# /kt:build -- the build stage
 
-Load `katai:workflow` through the Skill tool first. An argument, when the
+Load `kt:workflow` through the Skill tool first. An argument, when the
 owner gave one, is:
 
 <issues>
@@ -45,7 +45,7 @@ base, and the parent's branch for a stacked issue.
 
 ## Entry check
 
-Read the script's lines as `katai:workflow`, "What the stage printed", says.
+Read the script's lines as `kt:workflow`, "What the stage printed", says.
 
 - A stop line of the script: stop and say what it printed.
 - `tracked changes:` other than 0 is the owner's decision before anything
@@ -79,7 +79,7 @@ its branches, such as `branch: merged <k> (<branch> #<n>, ...)`:
   owner decides.
 - The `branch: merged` line, as `<branch> #<n>`, or a merged pull request
   found for a branch that no `branch:` line names: it merged outside the
-  stages. Report that, and name `/katai:merge <n>`, which runs what is
+  stages. Report that, and name `/kt:merge <n>`, which runs what is
   left.
 - The `branch: closed` line: stop for that issue and report it; the owner
   decides.
@@ -89,7 +89,7 @@ its branches, such as `branch: merged <k> (<branch> #<n>, ...)`:
 
 ## The commits
 
-Load `katai:doc-discipline` through the Skill tool once, before the first
+Load `kt:doc-discipline` through the Skill tool once, before the first
 code commit of the session, and read its `narrative.md` and `placement.md`.
 Then, issue by issue in landing order:
 
@@ -99,7 +99,7 @@ Then, issue by issue in landing order:
    issue, cut it at the parent branch's current head:
    `git switch -c <branch> <parent branch>`.
 2. Land the plan's Commits section in order, one small commit each, in the
-   form of `katai:workflow`, "Branches and commits". What a commit must pass
+   form of `kt:workflow`, "Branches and commits". What a commit must pass
    depends on the merge style:
    - Fast-forward: each commit builds and passes lint and tests with the
      commands the instruction files name, because every commit lands on the
@@ -142,9 +142,9 @@ Then, issue by issue in landing order:
    guess and never left out silently.
 
    Steps 3 to 9 check the comments after the last code commit. They follow
-   `checks.md` of `katai:doc-discipline` with the commands below. Run each
+   `checks.md` of `kt:doc-discipline` with the commands below. Run each
    step as written, through the command or the skill it names, and save its
-   output where the step says. The call to `katai:doc-read` holds the range
+   output where the step says. The call to `kt:doc-read` holds the range
    and the part number and no other word. Reading your own work against the
    guide's text stands in for none of these steps: it leaves no saved file,
    and a step without its saved file counts as not run. The issue reaches the push
@@ -153,8 +153,8 @@ Then, issue by issue in landing order:
    whole files.
 
    You write every comment and document of the issue, from evidence you can
-   name. `katai:doc-read` and `katai:doc-audit` each run in a fork of their
-   own on the agent `katai:doc-reader`, which has no tool that writes. They
+   name. `kt:doc-read` and `kt:doc-audit` each run in a fork of their
+   own on the agent `kt:doc-reader`, which has no tool that writes. They
    report, and you decide what changes.
 
    The commits of steps 3 to 9 take two forms. A rename or a restructuring
@@ -163,7 +163,7 @@ Then, issue by issue in landing order:
    a commit.
 
 3. Run the step check over every file the branch changed, code and
-   Markdown, with the base directory that the loaded `katai:doc-discipline`
+   Markdown, with the base directory that the loaded `kt:doc-discipline`
    shows:
 
    ```
@@ -186,7 +186,7 @@ Then, issue by issue in landing order:
    python3 <doc-discipline base directory>/scripts/change_parts.py <base>...HEAD
    ```
 
-   Then run `katai:doc-read` through the Skill tool with the arguments
+   Then run `kt:doc-read` through the Skill tool with the arguments
    `<base>...HEAD <part>`, once for each part. The calls may run side by
    side. The skill gives the range and the part number to a reader that has
    seen neither the plan nor this conversation, and it returns the reader's
@@ -223,14 +223,14 @@ Then, issue by issue in landing order:
 
 6. Reader round 2, only when step 5 changed comments, documents or code.
    List the parts of `<closed>...HEAD` as step 4 does, and run
-   `katai:doc-read` with `<closed>...HEAD <part>` for each part, so that
+   `kt:doc-read` with `<closed>...HEAD <part>` for each part, so that
    fresh readers read what step 5 changed. They are not told what the
    readers of round 1 said. Save their answers verbatim, in the order of
    the parts, as `<slug>-read-2.md` in the plans folder, close their stops
    as step 5 says, and append the closing lines to that file. There is no
    third round.
 
-7. The audit. Run `katai:doc-audit` through the Skill tool with the
+7. The audit. Run `kt:doc-audit` through the Skill tool with the
    arguments `<base>...HEAD plan: <plans folder>/<slug>-plan.md`. Where
    `owner: shared`, put the word `lines` after the range. When the plan's
    Knowledge section names a document that the branch did not change, add
@@ -311,9 +311,9 @@ the note claims the plan sketched for two guards of a parser, and the
 closures and tuple patterns of its helpers stay bare, because the plan did
 not name them. The claims are the least the code carries. Or: you read
 `checks.md` and do the cold read and the audit from its text, without
-calling `katai:doc-read` and `katai:doc-audit`. The review says "reader: no
+calling `kt:doc-read` and `kt:doc-audit`. The review says "reader: no
 stops, audit: clean", and `<slug>-read-1.md` does not exist, so nothing
-shows the owner that no reader ran. Or: you call `katai:doc-read` with
+shows the owner that no reader ran. Or: you call `kt:doc-read` with
 `<base>...HEAD 1 the parser helpers are dense`. The reader finds its stops
 because it does not know what you know, so the call holds the range and the
 part number alone. Or: you start a subagent to write the comments for the
@@ -361,7 +361,7 @@ for a pull request, where its `pull request:` line counts threads or
 comments, and again before each review of it: through the skill that covers
 pull requests where one does, else with `gh pr view <n> --comments` and
 `gh api repos/<owner>/<repo>/pulls/<n>/comments` for the comments on lines.
-A cleared session finds them again this way when `/katai:build` runs on the
+A cleared session finds them again this way when `/kt:build` runs on the
 open pull request.
 
 The reviews run one after another, in landing order, bottom of a stack
@@ -495,7 +495,7 @@ there is no CI; who took the pull request and CI steps, such as "pull
 request: <skill>" or "CI: gh pr checks"; the command
 `git diff <base>...<branch>`. After the issues, one line naming the local
 services the build started and removed, or "none". Then one line saying the
-merge waits for `/katai:merge`.
+merge waits for `/kt:merge`.
 
-Then wait. Do not ask whether to merge; the owner invokes `/katai:merge`
+Then wait. Do not ask whether to merge; the owner invokes `/kt:merge`
 when they are ready.

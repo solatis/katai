@@ -1,5 +1,5 @@
 {
-  "name": "katai",
+  "name": "kt",
   "description": "A staged workflow for Claude Code: start, plan, build and merge, with the owner's command as the gate between stages.",
   "author": {
     "name": "Leon Mergen"
