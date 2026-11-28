@@ -273,8 +273,12 @@ channel ("Asking and reviews").
 
 ## Plans
 
+- katai keeps everything of a repository in one folder,
+  `~/.local/state/katai/github.com/<owner>/<repo>/`, with the owner and the
+  repository of the `github:` line: its `plans/`, `lessons/` and
+  `worktrees/` folders.
 - The plans folder is the one the `plans:` line names,
-  `~/.local/state/katai/github.com/<owner>/<repo>/`. It lies outside every
+  `~/.local/state/katai/github.com/<owner>/<repo>/plans/`. It lies outside every
   checkout, so every clone and worktree of the repository and a cleared
   session find the same files. Nothing in it is committed, pushed or part
   of a diff. The first stage that writes a file there creates the folder.
@@ -318,8 +322,8 @@ channel ("Asking and reviews").
 ## Lessons
 
 - The lessons folder of a repository is
-  `~/.local/state/katai/lessons/github.com/<owner>/<repo>/`, with the
-  owner and the repository of the `github:` line. Like the plans folder, it
+  `~/.local/state/katai/github.com/<owner>/<repo>/lessons/`, next to the
+  plans folder. Like the plans folder, it
   lies outside every checkout, and nothing in it is committed or pushed.
   The first stage that writes a file there creates the folder.
 - It holds one record per unit, `<unit>.md`. Until the record is written

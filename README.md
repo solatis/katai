@@ -26,16 +26,18 @@ claude plugin install katai --marketplace "$PWD/katai"
 Claude Code then loads katai from that clone. An edit in the clone is what
 the next session runs, and a running session takes it after `/reload-plugins`.
 
-katai keeps its plans under `~/.local/state/katai`, outside every checkout, so
-that a cleared session and a linked worktree find them. After a unit of work
-merges, katai lists the lessons your reviews' remarks suggest and asks you which to
-capture. It then drafts those with their evidence and a before and after from
-the work, and once you approve the draft, writes it to a lessons record under
-`~/.local/state/katai/lessons` and changes no rule. You read the records of
-several units together and decide which rules change, so that no rule swings
+katai keeps everything of a repository in one folder,
+`~/.local/state/katai/github.com/<owner>/<repo>`, outside every checkout, so
+that a cleared session and a linked worktree find it: the plans in `plans/`,
+the lessons records in `lessons/`. After a unit of work merges, katai lists
+the lessons your reviews' remarks suggest and asks you which to capture. It
+then drafts those with their evidence and a before and after from the work,
+and once you approve the draft, writes it to the repository's `lessons/` and
+changes no rule. You read the records of several units together and decide
+which rules change, so that no rule swings
 on the remarks of a single unit. In the default
 permission mode Claude Code asks before each read outside the working
-directory. To stop that, list the folder under
+directory. To stop that, list `~/.local/state/katai` under
 `permissions.additionalDirectories` in your user settings.
 
 To remove katai:

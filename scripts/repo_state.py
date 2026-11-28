@@ -121,10 +121,15 @@ def is_own(login, repo):
     return login.lower() == repo.split("/")[0]
 
 
-def plans_dir(home, repo):
-    """Return the plans folder of a repository, which lives outside every checkout of it."""
+def state_dir(home, repo):
+    """Return katai's folder for a repository, which lives outside every checkout of it."""
     owner, name = repo.split("/")
     return os.path.join(home, ".local", "state", "katai", "github.com", owner, name)
+
+
+def plans_dir(home, repo):
+    """Return the plans folder of a repository, inside the repository's katai folder."""
+    return os.path.join(state_dir(home, repo), "plans")
 
 
 def same_path(a, b):

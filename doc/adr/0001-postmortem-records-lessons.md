@@ -37,7 +37,7 @@ picked class also holds the rule sentence that covers it, what failed, the
 earlier opposite complaints and its home. A lesson not picked is one line.
 The draft holds no proposed rule text. The merge stage shows it for review,
 and writes the approved draft to
-`~/.local/state/katai/lessons/github.com/<owner>/<repo>/<unit>.md`. It asks
+`~/.local/state/katai/github.com/<owner>/<repo>/lessons/<unit>.md`. It asks
 nothing about rules.
 
 No stage turns a record into a rule change. The owner reads the records of
