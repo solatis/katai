@@ -79,8 +79,13 @@ Report also:
 - a walkthrough item that repeats what the code of its step shows, such as
   the values it checks or the calls it makes
 - a statement you believe false, with the line that contradicts it
-- a sentence of a doc comment that you understood only after you had said it
-  to yourself in plainer words
+- a doc comment above a function whose first sentence has no verb that says
+  what the function does
+- a sentence of a comment that you could follow only after you untangled a
+  chain, such as "the X of the Y of the Z" or one "which" clause inside
+  another
+- a term that this code defines, used in a comment before any comment says
+  what it means
 
 Read a changed Markdown file as a newcomer to the repository. Report a
 sentence you had to read twice, a term used without a definition or a

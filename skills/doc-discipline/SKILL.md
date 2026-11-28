@@ -108,8 +108,10 @@ without quotes or spaces.
   file included. It returns one row for each line where it stopped, each
   function whose plan it had to rebuild, each comment that told it nothing,
   each walkthrough item that repeats its code, each statement it believes
-  false, each sentence of a doc comment that it understood only in plainer
-  words, and each term or statement in a document it could not place.
+  false, each doc comment that does not say with a verb what its function
+  does, each sentence it had to untangle, each term the code defines that a
+  comment uses before any comment explains it, and each term or statement in
+  a document it could not place.
 - `katai:doc-audit <scope> [lines] [plan: <plan>] [focus: ...] [also: ...]`
   takes a range or one path. `lines` holds it to the lines the change adds or
   rewrites. It may also take a plan to reconcile against, a focus that limits

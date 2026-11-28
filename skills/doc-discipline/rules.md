@@ -15,9 +15,12 @@ function can carry four kinds of comment: the doc comment above it, the
 walkthrough at the top of its body, one back-reference per step of the
 walkthrough, and notes at single lines.
 
-1. The doc comment above a function is the contract for callers, in one to
-   three sentences: what it does, what it returns and how it fails. It holds
-   no implementation detail.
+1. The doc comment above a function opens with a verb, after the function's
+   name where the language's convention puts the name first. It tells a
+   caller in one to three sentences what the function does and what it is
+   for, then what it returns and how it fails. It says how the function
+   works only where a caller needs that to use it, as with a macro or a
+   generic helper.
 2. Each function gets one of three levels. A function that forwards, passes
    settings through or maps fields one to one is bare, whatever else is true
    of it. A constant in it still says where it came from. Test the other
@@ -77,10 +80,11 @@ walkthrough, and notes at single lines.
    what the line achieves in the terms of the problem, or why the line is
    there. A note that repeats its line in other words is deleted, and so is a
    note that explains what a language feature does in general.
-8. A comment names one example input only where the effect is hard to see
-   without one, as at a grammar rule, an alternative of a choice or a match
-   arm whose case is not obvious. Most notes carry no example. A byte offset
-   appears only where the code computes a range.
+8. A comment gives one concrete case where it states a rule about values,
+   such as which inputs match or how two types combine, and where the effect
+   of a line is hard to see without one, as at a grammar rule or a match arm
+   whose case is not obvious. A comment gives no case where its line already
+   shows one. A byte offset appears only where the code computes a range.
 9. Numbers appear only in a walkthrough and its back-references. A list
    inside a note uses bullets.
 10. Each kind of comment has a normal size. A walkthrough item is one
@@ -168,10 +172,22 @@ sentence that no one would say is rewritten. The rewrite keeps the facts a
 reader needs and drops the facts the code already shows. Each sentence below
 stands next to what a colleague would write:
 
-| Written                                                      | A colleague writes                                                           |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| The handshake is the version check.                          | Connecting with the client's version is how we check it.                     |
-| A save is never retried, because it is not a read.           | SaveOrder does not retry, because only reads are safe to run twice.          |
-| The worker runs j as u in u's own sandbox.                   | Runs the job in the user's own sandbox.                                      |
-| An empty page is read as the end, not fetched again.         | A query past the last row returns an empty page, which means no rows remain. |
-| The logging layer wraps every route; the order is the point. | Add the logging layer last, so it also wraps `/health`.                      |
+| Written                                                                       | A colleague writes                                                                              |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| The handshake is the version check.                                           | Connecting with the client's version is how we check it.                                        |
+| A save is never retried, because it is not a read.                            | SaveOrder does not retry, because only reads are safe to run twice.                             |
+| The worker runs j as u in u's own sandbox.                                    | Runs the job in the user's own sandbox.                                                         |
+| An empty page is read as the end, not fetched again.                          | A query past the last row returns an empty page, which means no rows remain.                    |
+| The logging layer wraps every route; the order is the point.                  | Add the logging layer last, so it also wraps `/health`.                                         |
+| The status of `o` as a candidate for a refund.                                | Checks whether order `o` can still be refunded.                                                 |
+| Runs `fn` with `tx` as the transaction of the connection of the pool.         | Takes a connection from the pool, opens a transaction on it and passes the transaction to `fn`. |
+| A cart that holds an item whose stock holds no unit is refused.               | Rejects a cart when one of its items is out of stock.                                           |
+| A stale entry is the entry of a key whose age exceeds the limit of its class. | An entry is stale when it is older than its class allows, such as a session after 30 minutes.   |
+| Seals the batch before the flush.                                             | Seals the batch, so that no more rows can be added to it, and then writes it to disk.           |
+
+The first five sentences are too clever, and the last five read like a
+specification. A sentence of the second kind names a thing by its place among
+other things, chains "of" and "whose", or uses a term that nothing has
+explained. Its rewrite starts from what the code does and uses the verb a
+colleague would say, such as "has" or "contains" where the sentence said
+"holds".

@@ -44,8 +44,8 @@ bullet: "what is the smallest piece of code this is about?"
   edge-case lists). Map rows are fine; essays about a row's subject are not.
 - README-style files, commit-message-like notes, leftover plan or TODO files.
 - File header comments that explain one function in that file.
-- Doc comments above a function that explain implementation rather than
-  contract. Implementation notes move inside the body.
+- Doc comments above a function that explain implementation a caller does
+  not need. Implementation notes move inside the body.
 
 Then walk the code bottom-up for the reverse problem, which is rarer:
 comments that state cross-file or cross-component facts (protocol rules,
@@ -79,8 +79,8 @@ anything:
 3. Delete the source passage. If the source needs to keep the topic visible,
    leave a pointer of one line at most: what, and which file.
 4. Shape the result per `narrative.md`, within the sizes that rule 10 of
-   "Code comments" in `rules.md` gives. Text above the signature is the
-   contract. Text on how a function works goes into the walkthrough inside
+   "Code comments" in `rules.md` gives. Text above the signature is
+   for callers. Text on how a function works goes into the walkthrough inside
    the body, when the function qualifies for one.
 5. After writing the destination comment, read it back as a list of separate
    claims and check each one against the code directly below it. Fix or

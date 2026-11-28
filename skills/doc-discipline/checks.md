@@ -62,8 +62,9 @@ Where the stage printed `owner: own`, every check covers whole files.
       held to the owner's lines, when the change does not touch the line
 
    Rewrite or delete a comment that the reader said told it nothing or
-   repeated its code, and rewrite each sentence that the reader understood
-   only in plainer words. Check a statement that the reader believed false
+   repeated its code. Rewrite each sentence of a `plain` row from what the
+   code does, and explain the term of each `term` row where it first
+   appears. Check a statement that the reader believed false
    against the code, and correct the statement or the code.
 
 4. When step 3 changed a comment, a document or the code, run a second
