@@ -52,27 +52,31 @@ of `comments.md` says how it is commented.
     flag, hook or interface exists only for a test unless a Rationale row
     of the plan names it. Making logic stateless is design and not a change
     for the sake of a test.
+13. The name of a test says the behavior it checks, so that a failing run
+    names what broke. Cases that differ only in their input and their
+    expected value are rows of one table behind one test body, and each
+    row has a name.
 
 ## Real systems and isolation
 
-13. A test uses the real dependency. A subsystem is anything across a
+14. A test uses the real dependency. A subsystem is anything across a
     process, network or storage boundary, or another component of the
     repository. A fake, mock or stub of a subsystem is a Rationale row of
     the plan that names the subsystem and why the real one cannot serve,
     and a hook that makes a real system fail on demand counts as one. Time
     and randomness are passed in as values and are no subsystem.
-14. Each test creates the data it reads and writes, under names no other
+15. Each test creates the data it reads and writes, under names no other
     test uses, and removes it. The systems it runs against belong to the
     fixture.
 
 ## The language and the existing tests
 
-15. How the language spells a kind, such as the library that draws inputs
+16. How the language spells a kind, such as the library that draws inputs
     or the command that runs the tests, is what the repository already
     uses, as its dependency manifest, its lint configuration and its tests
     show. Where the tree shows none, the plan proposes one in a Rationale
     row.
-16. A change holds the tests it adds or rewrites to these rules and leaves
+17. A change holds the tests it adds or rewrites to these rules and leaves
     the others as they are. A new case in an existing structure, such as a
     table of cases behind one fixture, continues that structure, and the
     plan names the structure. No change rewrites existing tests only to
