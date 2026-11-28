@@ -1,6 +1,6 @@
 ---
 name: merge
-description: Open the merge stage -- per pull request in landing order, land each one that GitHub would accept by the repository's merge style, carry it to the release lines its plan names, close or report its tracker item, delete the plan, close the milestone it completes, and after the last pull request of a unit run the postmortem and write its lessons record, which changes no rule. Invoked by the owner after reviewing the code; the invocation is the owner's yes on the code.
+description: Open the merge stage -- per pull request in landing order, land each one that GitHub would accept by the repository's merge style, carry it to the release lines its plan names, close or report its tracker item, delete the plan, close the milestone it completes, and after the last pull request of a unit run the postmortem, ask the owner which of its lessons to capture, show the draft for review, and write the lessons record, which changes no rule. Invoked by the owner after reviewing the code; the invocation is the owner's yes on the code.
 disable-model-invocation: true
 argument-hint: "[item, pull request or branch ...]"
 allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"), Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/step_check_prs.py")
@@ -217,21 +217,44 @@ line, which holds from any checkout. List the plans folder again after step
 pull request of this run, do this for each unit that this run completed:
 
 1. Load `katai:postmortem` through the Skill tool with the unit's slug,
-   taken from the plans, as its argument, and no other word. The skill runs
-   in a fork of its own, which has not seen this session and prints the
-   repository's state for itself. It returns the text of one lessons
-   record, or one line that starts with `no record`.
-2. On `no record`, add that line to the closing lines below.
-3. Otherwise write the text as it came into `<lessons>/<unit>.md`, where
-   `<lessons>` is the lessons folder of `katai:workflow`, "Lessons". Create
-   the folder where it does not exist. Where the file exists, from an
-   earlier run of this unit, replace it. Then delete `<unit>-asked.md`
-   there, whose entries the record now carries.
+   taken from the plans, and the word `candidates` as its arguments, and no
+   other word. The skill runs in a fork of its own, which has not seen this
+   session and prints the repository's state for itself. It returns the
+   candidate lessons, or one line that starts with `no record`.
+2. On `no record`, add that line to the closing lines below, and stop here
+   for this unit.
+3. Write the candidates as they came into `<lessons>/<unit>-candidates.md`,
+   where `<lessons>` is the lessons folder of `katai:workflow`, "Lessons".
+   Create the folder where it does not exist. The file is how a cleared
+   session finds where the postmortem stands.
+4. Ask the owner which lessons to capture, in one question where the owner
+   picks several, one choice per lesson: its number and heading as the
+   label, its assessment and marks as the description. Below the choices,
+   say that the owner may correct an assessment in words. The question
+   carries no recommendation and nothing is picked in advance, because the
+   owner's weighing is what it collects; a lesson marked `Asked: yes` says
+   so in its description. The decisions are listed in the question's
+   context and are not picked.
+5. Append the answer to `<unit>-candidates.md` under `## Owner's answer`:
+   the date, the numbers picked, and the owner's words as they came. Where
+   the owner picked none, write `<lessons>/<unit>.md` with the header lines
+   of the candidates, `Picked: none`, and the lessons as one line each under
+   "Not picked", and go to step 9.
+6. Load `katai:postmortem` again with the unit's slug and the word `draft`.
+   It returns the draft of the record.
+7. Show the draft for review. A redirect is folded in: apply the owner's
+   words to the draft, or where they change which lessons are picked,
+   append them to `## Owner's answer` and run step 6 again, then show the
+   result for review again.
+8. On approval, write the approved draft into `<lessons>/<unit>.md`,
+   replacing a record from an earlier run of this unit.
+9. Delete `<unit>-candidates.md` and `<unit>-asked.md`, whose entries the
+   record now carries.
 
-Ask the owner nothing about the record, and change no rule file: not
-katai's, not this repository's instruction files, not the owner's own
-configuration. A rule changes only when the owner reads the records of
-several units together, as "Lessons" says.
+Change no rule file: not katai's, not this repository's instruction files,
+not the owner's own configuration. A picked lesson is no request for a rule
+change. A rule changes only when the owner reads the records of several
+units together, as "Lessons" says.
 
 ## The closing lines
 
@@ -246,7 +269,7 @@ it; then the number of unresolved threads of other people; then who
 took each step, such as "merge: <skill>" or "tracker: gh issue close". Add
 one line per pull request that stopped, with the reason, and one line per
 postmortem: its `no record` line, or the path of the record with its count
-of classes, places and decisions.
+of picked and not picked lessons and of decisions.
 
 Correct: `cache-expiry` (#20) and `cache-metrics` (#21, stacked on expiry)
 are green, GitHub would accept #20, and the step check shows 0 findings for
@@ -272,4 +295,9 @@ resolve them before the merge. Or: you tell `katai:postmortem` which remarks
 you think matter, so the postmortem sorts them the way the session that
 built the code sees them. Or: the record names a class whose home is katai,
 and you edit katai's skills from this repository, or ask the owner whether
-to change the rule now.
+to change the rule now. Or: you ask which lessons to capture with a
+recommendation, or you leave out a place you judge small, so the owner
+weighs the candidates as you weighed them. Or: you write the record before
+the owner approved the draft. Or: the owner leaves L2 unpicked, and the
+record drops it entirely, so a third unit with the same place shows no
+earlier one.
