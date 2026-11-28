@@ -72,8 +72,8 @@ Four words have a fixed meaning here:
    followed at the marked places.
 4. The commits that answered each reply, with
    `git log --oneline <head the reply marked>..<head of the next review>`.
-5. The records of earlier units, in every repository's folder under
-   `~/.local/state/katai/lessons/`.
+5. The records of earlier units, in the `lessons/` folder of every
+   repository under `~/.local/state/katai/github.com/`.
 6. The rule files of the three layers that "Changing a rule" lists, and the
    decision records:
    - this repository's instruction files: its tracked `AGENTS.md` and

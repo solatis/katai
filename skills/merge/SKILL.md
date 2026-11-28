@@ -129,15 +129,15 @@ request its base branch belongs to):
 
    ```
    git fetch origin <line>
-   git worktree add --detach <root>/worktrees/<repo>-<n>-<line> origin/<line>
+   git worktree add --detach <root>/worktrees/<n>-<line> origin/<line>
    git -C <worktree> submodule update --init
    git -C <worktree> cherry-pick <landed commits>
    git -C <worktree> push origin HEAD:<line>
    git worktree remove <worktree>
    ```
 
-   `<root>` is the folder of the `plans:` line without its last three parts,
-   `github.com/<owner>/<repo>`; a `/` in the line's name becomes `-` in the
+   `<root>` is the folder of the `plans:` line without its last part,
+   `plans`; a `/` in the line's name becomes `-` in the
    folder's name. The `submodule` line runs only where the `submodules:`
    line counts one or more. Before the push, run in the worktree the check
    the instruction files name for a commit. The pick runs in a detached
