@@ -3,7 +3,7 @@
 
 The merge stage runs this script when it loads, with no argument. For each
 open pull request of the signed-in user in this repository, oldest first, it
-runs `check_steps.py` of the doc-discipline skill over the range
+runs `check_steps.py` of the standards skill over the range
 `origin/<base>...origin/<head>` and prints one line, `#<n> <head>: ` and the
 last line the check printed. That line counts the findings when the check ran,
 and says why when it did not. The merge reads it here, because CI does not run
@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import repo_state as rs  # noqa: E402
 
 PLUGIN_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CHECK_STEPS = os.path.join(PLUGIN_ROOT, "skills", "doc-discipline", "scripts", "check_steps.py")
+CHECK_STEPS = os.path.join(PLUGIN_ROOT, "skills", "standards", "scripts", "check_steps.py")
 OWNER_MARK = r"\(owner,"
 
 

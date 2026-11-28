@@ -91,7 +91,7 @@ the stage only through that print.
    pull request title of the seed report that holds the item's key as a
    placeholder gets the key now, as `kt:workflow`, "Names", says.
 
-2. Load `kt:doc-discipline` through the Skill tool, and read its
+2. Load `kt:standards` through the Skill tool, and read its
    `narrative.md` and `placement.md`.
 3. Read `${CLAUDE_SKILL_DIR}/plan-shape.md`, and write one plan per
    issue, `<slug>-plan.md` in the folder of the `plans:` line, in that
@@ -148,10 +148,10 @@ the stage only through that print.
    commits deliver.
 
    Run the step check on each plan, with the base directory that the loaded
-   `kt:doc-discipline` shows:
+   `kt:standards` shows:
 
    ```
-   python3 <doc-discipline base directory>/scripts/check_steps.py --markdown <plans folder>/<slug>-plan.md
+   python3 <standards base directory>/scripts/check_steps.py --markdown <plans folder>/<slug>-plan.md
    ```
 
    Fix every finding in the sketches, and run the check again until its

@@ -16,7 +16,7 @@ that reader: an executor who writes every commit, every comment and every
 document row from the plan alone, without guessing and without asking, and
 who could defend each choice to the owner the way you can now.
 
-Step 2 of the plan stage has loaded `kt:doc-discipline` and read its
+Step 2 of the plan stage has loaded `kt:standards` and read its
 `narrative.md` and `placement.md`. They give the comment shape and the
 placement ladder the build stage is held to, so the plan's comment
 specifications and homes name that shape from the start rather than
@@ -58,7 +58,7 @@ it is never dropped.
    lost, or it is a question asked before the gate. Every new type, route,
    table, column or module the owner did not name is a row marked
    `proposal`, so no choice hides in a sketch. The row of a new name says
-   what sets the named thing apart, as `names.md` of `kt:doc-discipline`
+   what sets the named thing apart, as `names.md` of `kt:standards`
    asks. "Rejected, and why" names the alternative that lost and what sank
    it, so no later agent re-litigates it. "Gained" and "given up" are the
    trade: what the issue buys, and the cost it accepts (a limitation, a
@@ -146,7 +146,7 @@ it is never dropped.
 
 6. How the knowledge lands. One line: the build stage is `/kt:build`,
    which writes every comment and document row from sections 4 and 5 in
-   the same commit as the code and has `kt:doc-audit` reconcile the code
+   the same commit as the code and has `kt:audit` reconcile the code
    against this plan before the push. Below it, only what is specific to
    this issue: a commit whose comments depend on a fact the executor must
    check first, a document row that must land before a code commit can
@@ -155,8 +155,8 @@ it is never dropped.
 7. Commits. The numbered list, one subject each in the commit form of
    `kt:workflow`, "Branches and commits", in landing order: the build
    commits, then the comment checks the build stage makes after the last of
-   them (the step check, the `kt:doc-read` rounds and the
-   `kt:doc-audit` run, whose commits depend on their findings), then the
+   them (the step check, the `kt:read` rounds and the
+   `kt:audit` run, whose commits depend on their findings), then the
    Verify step, last. In the owner's own repository, when the issue changes
    a file whose comments do not pass the step check, the list holds one
    `docs` commit that brings that file's comments into the shape of the

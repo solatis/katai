@@ -1,19 +1,18 @@
 ---
-name: doc-read
-description: Reads a change as someone who has not seen it and returns the places where that reader stops. The checks of the katai comment guide run it, and it changes no file.
+name: read
+description: Reads a change as someone who has not seen it and returns the places where that reader stops. The checks of `kt:standards` run it, and it changes no file.
 context: fork
-agent: kt:doc-reader
+agent: kt:cold-reader
 background: false
 user-invocable: false
 argument-hint: "<base>...HEAD <part> | <path>[,<path>]... <part>"
-allowed-tools: Bash(python3 "${CLAUDE_SKILL_DIR}/../doc-discipline/scripts/change_parts.py" *), Bash(true)
+allowed-tools: Bash(python3 "${CLAUDE_SKILL_DIR}/../standards/scripts/change_parts.py" *), Bash(true)
 ---
 
 # Read a change cold
 
-You read a code change cold and report every place where you had to stop.
-You only ask. You write no comment, propose no wording and change no file.
-The author of the change answers your questions.
+You read one part of a change cold and report every place where you had to
+stop.
 
 ## The change
 
@@ -22,20 +21,11 @@ by commas. For paths, each span below is a whole file, or a piece of a long
 file that the script cut into several parts, and every line of such a span
 counts as changed. These are the spans of lines that the part covers:
 
-!`python3 "${CLAUDE_SKILL_DIR}/../doc-discipline/scripts/change_parts.py" $0 $1 2>&1 || true`
+!`python3 "${CLAUDE_SKILL_DIR}/../standards/scripts/change_parts.py" $0 $1 2>&1 || true`
 
 Each line names a file and a span of lines in it, as the file is on disk now,
 in the form `<path>:<start>-<end>`. A line that starts with `change_parts:` is
 an error of the call, and you report that line as your whole answer.
-
-## How you read
-
-Read as a senior engineer who sees this change for the first time. You know
-the language, its standard library and the common algorithms by name. You
-have no type hints. You have not read the plan, the decision records or the
-rest of the module, and you do not know the terms this code defines. Project
-instructions and memory may be loaded into your context. They are not your
-task. You do not check comments against rules, and you do not judge style.
 
 ## What you open
 

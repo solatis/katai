@@ -1,12 +1,12 @@
 ---
-name: doc-audit
-description: Audits code and documents against the comment rules of katai and the documentation policy of the repository, and returns the changes they call for as rows of a report. The checks of the katai comment guide run it, and it changes no file.
+name: audit
+description: Audits code and documents against the comment rules of katai and the documentation policy of the repository, and returns the changes they call for as rows of a report. The checks of `kt:standards` run it, and it changes no file.
 context: fork
-agent: kt:doc-reader
+agent: kt:auditor
 background: false
 user-invocable: false
 argument-hint: "<base>...HEAD | <path> [lines] [plan: <plan>] [focus: ...] [also: ...]"
-allowed-tools: Bash(git diff:*), Bash(grep:*), Bash(true), Bash(python3 "${CLAUDE_SKILL_DIR}/../doc-discipline/scripts/check_steps.py" *)
+allowed-tools: Bash(git diff:*), Bash(grep:*), Bash(true), Bash(python3 "${CLAUDE_SKILL_DIR}/../standards/scripts/check_steps.py" *)
 ---
 
 # Audit comments and documents
@@ -14,8 +14,6 @@ allowed-tools: Bash(git diff:*), Bash(grep:*), Bash(true), Bash(python3 "${CLAUD
 The caller's words: $ARGUMENTS
 
 You audit code and documents against the rules for comments and documents.
-You change no file. You propose each change as a row of your report, and the
-session that called you decides on each row.
 
 ## The changed lines
 
@@ -28,7 +26,7 @@ scope whole and set this block aside.
 
 ## The step check
 
-!`python3 "${CLAUDE_SKILL_DIR}/../doc-discipline/scripts/check_steps.py" --warn --words $0 2>&1 || true`
+!`python3 "${CLAUDE_SKILL_DIR}/../standards/scripts/check_steps.py" --warn --words $0 2>&1 || true`
 
 A line whose rule is `W1`, `W2` or `W3` is a warning, and you judge whether
 it calls for a row. A line `skipped <path>: <reason>` names a changed file
@@ -44,7 +42,7 @@ file in scope.
   or rewrites, because the repository belongs to other people as well. A row
   names only a line that the block of changed lines covers, and a finding of
   the step check on another line is no row. A row whose change reaches lines
-  outside the change, as rule 13 of "Code comments" asks for a touched
+  outside the change, as rule 13 of `comments.md` asks for a touched
   comment block, names those lines, and the caller decides on it. You propose
   no move into a document that the change does not touch.
 - `plan:` is followed by the path of the plan to reconcile against. You read
@@ -61,14 +59,15 @@ file in scope.
 
 ## What you read
 
-1. The rules: `${CLAUDE_SKILL_DIR}/../doc-discipline/rules.md`, whole. The
+1. The rules: `${CLAUDE_SKILL_DIR}/../standards/comments.md` and
+   `${CLAUDE_SKILL_DIR}/../standards/prose.md`, whole. The
    policy of the repository: the "Documentation strategy" section of the root
    `AGENTS.md`, and the `AGENTS.md` of the documentation folder that the
    section names, where they exist.
-2. `${CLAUDE_SKILL_DIR}/../doc-discipline/SKILL.md`, whole.
-3. `${CLAUDE_SKILL_DIR}/../doc-discipline/narrative.md` when the scope holds
+2. `${CLAUDE_SKILL_DIR}/../standards/SKILL.md`, whole.
+3. `${CLAUDE_SKILL_DIR}/../standards/narrative.md` when the scope holds
    code or tests. You apply it to each function in scope.
-4. `${CLAUDE_SKILL_DIR}/../doc-discipline/placement.md` when the scope holds
+4. `${CLAUDE_SKILL_DIR}/../standards/placement.md` when the scope holds
    Markdown. You apply it, and the rules of the documentation folder's
    `AGENTS.md`, to each document in scope.
 5. The documents of the change: each `AGENTS.md` from the root down to each
@@ -83,16 +82,15 @@ file in scope.
 - `comments`: the level of each function and its comments, by
   `narrative.md`, with the cut pass and the gaps.
 - `wording`: each sentence of a comment or document in scope against the
-  "Prose" rules of `rules.md`.
+  rules of `prose.md`.
 - `numbering`: the step check above. Each of its findings is a row. The step
   check above runs without deny patterns, so you search the comments in scope
-  with Grep for the two forms that rule 16 of "Code comments" forbids: the
+  with Grep for the two forms that rule 16 of `comments.md` forbids: the
   path of the repository's folder of decision records, and `(owner,`.
 
 When a plan is named, follow "Reconciling against a plan document" in the
-guide. A reason that the code, a test, a document or a commit does not
-support is a question under "Rationale unknown", and you write no guess at
-it. Each row names a file, a line and one change or one question.
+guide. A reason that nothing supports is a question under "Rationale
+unknown".
 
 ## Your answer
 

@@ -89,7 +89,7 @@ its branches, such as `branch: merged <k> (<branch> #<n>, ...)`:
 
 ## The commits
 
-Load `kt:doc-discipline` through the Skill tool once, before the first
+Load `kt:standards` through the Skill tool once, before the first
 code commit of the session, and read its `narrative.md` and `placement.md`.
 Then, issue by issue in landing order:
 
@@ -125,7 +125,7 @@ Then, issue by issue in landing order:
    are never patched with another clause. Where `owner: shared`, that holds
    for the owner's own blocks: a block another author wrote, as `git blame`
    shows, keeps its wording, and a finding in it is listed in the review's
-   "Comment checks" and left. In the owner's own repository, the sentences
+   "Checks" and left. In the owner's own repository, the sentences
    the plan's Knowledge section lands in the root `AGENTS.md` go in a `docs`
    commit of their own.
 
@@ -142,9 +142,9 @@ Then, issue by issue in landing order:
    guess and never left out silently.
 
    Steps 3 to 9 check the comments after the last code commit. They follow
-   `checks.md` of `kt:doc-discipline` with the commands below. Run each
+   `checks.md` of `kt:standards` with the commands below. Run each
    step as written, through the command or the skill it names, and save its
-   output where the step says. The call to `kt:doc-read` holds the range
+   output where the step says. The call to `kt:read` holds the range
    and the part number and no other word. Reading your own work against the
    guide's text stands in for none of these steps: it leaves no saved file,
    and a step without its saved file counts as not run. The issue reaches the push
@@ -153,8 +153,9 @@ Then, issue by issue in landing order:
    whole files.
 
    You write every comment and document of the issue, from evidence you can
-   name. `kt:doc-read` and `kt:doc-audit` each run in a fork of their
-   own on the agent `kt:doc-reader`, which has no tool that writes. They
+   name. `kt:read` runs in a fork of its own on the agent
+   `kt:cold-reader`, and `kt:audit` on the agent `kt:auditor`. Neither
+   agent has a tool that writes. They
    report, and you decide what changes.
 
    The commits of steps 3 to 9 take two forms. A rename or a restructuring
@@ -163,11 +164,11 @@ Then, issue by issue in landing order:
    a commit.
 
 3. Run the step check over every file the branch changed, code and
-   Markdown, with the base directory that the loaded `kt:doc-discipline`
+   Markdown, with the base directory that the loaded `kt:standards`
    shows:
 
    ```
-   python3 <doc-discipline base directory>/scripts/check_steps.py --deny '<record folder>' --deny '\(owner,' --git-range <base>...HEAD --markdown-too 2>&1
+   python3 <standards base directory>/scripts/check_steps.py --deny '<record folder>' --deny '\(owner,' --git-range <base>...HEAD --markdown-too 2>&1
    ```
 
    `<record folder>` is the folder the `records:` line names, such as
@@ -178,15 +179,15 @@ Then, issue by issue in landing order:
    functions in the old shape that the branch did not touch. Fix every
    finding, and run the check again until its last line reports 0 findings.
    Keep each `skipped <path>: <reason>` line it prints on stderr, before the
-   findings, for the review's "Comment checks".
+   findings, for the review's "Checks".
 
 4. Reader round 1. List the parts of the change:
 
    ```
-   python3 <doc-discipline base directory>/scripts/change_parts.py <base>...HEAD
+   python3 <standards base directory>/scripts/change_parts.py <base>...HEAD
    ```
 
-   Then run `kt:doc-read` through the Skill tool with the arguments
+   Then run `kt:read` through the Skill tool with the arguments
    `<base>...HEAD <part>`, once for each part. The calls may run side by
    side. The skill gives the range and the part number to a reader that has
    seen neither the plan nor this conversation, and it returns the reader's
@@ -223,14 +224,14 @@ Then, issue by issue in landing order:
 
 6. Reader round 2, only when step 5 changed comments, documents or code.
    List the parts of `<closed>...HEAD` as step 4 does, and run
-   `kt:doc-read` with `<closed>...HEAD <part>` for each part, so that
+   `kt:read` with `<closed>...HEAD <part>` for each part, so that
    fresh readers read what step 5 changed. They are not told what the
    readers of round 1 said. Save their answers verbatim, in the order of
    the parts, as `<slug>-read-2.md` in the plans folder, close their stops
    as step 5 says, and append the closing lines to that file. There is no
    third round.
 
-7. The audit. Run `kt:doc-audit` through the Skill tool with the
+7. The audit. Run `kt:audit` through the Skill tool with the
    arguments `<base>...HEAD plan: <plans folder>/<slug>-plan.md`. Where
    `owner: shared`, put the word `lines` after the range. When the plan's
    Knowledge section names a document that the branch did not change, add
@@ -298,7 +299,7 @@ notes from evidence, rename one binding, ask the owner about one threshold,
 and decline one stop because it asks what `?` does. The reader of round 2
 reads the six notes and the rename and stops nowhere. The audit's report is
 saved, two findings are applied and one is declined, and the last step
-check reports 0 findings. The review's "Comment checks" section shows each
+check reports 0 findings. The review's "Checks" section shows each
 of these from the saved files.
 
 Incorrect: the comment says "the client drops an empty batch for safety",
@@ -311,9 +312,9 @@ the note claims the plan sketched for two guards of a parser, and the
 closures and tuple patterns of its helpers stay bare, because the plan did
 not name them. The claims are the least the code carries. Or: you read
 `checks.md` and do the cold read and the audit from its text, without
-calling `kt:doc-read` and `kt:doc-audit`. The review says "reader: no
+calling `kt:read` and `kt:audit`. The review says "reader: no
 stops, audit: clean", and `<slug>-read-1.md` does not exist, so nothing
-shows the owner that no reader ran. Or: you call `kt:doc-read` with
+shows the owner that no reader ran. Or: you call `kt:read` with
 `<base>...HEAD 1 the parser helpers are dense`. The reader finds its stops
 because it does not know what you know, so the call holds the range and the
 part number alone. Or: you start a subagent to write the comments for the
@@ -392,7 +393,7 @@ For each pull request:
      plan with the reason the code forced it and the chapter it lands in,
      then each comment of another reviewer with the owner's answer and the
      commit that applied it.
-   - Last in the body, a section "Comment checks", built from the files
+   - Last in the body, a section "Checks", built from the files
      `<slug>-read-1.md`, `<slug>-read-2.md` and `<slug>-audit.md` and from
      a run of the step check of step 3 at the pushed head:
      - the last line of the step check, and each `skipped <path>: <reason>`

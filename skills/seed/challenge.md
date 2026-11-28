@@ -77,10 +77,9 @@ value they give is not asked.
   makes each item and gives its key at the plan stage" and "no item, the
   plan is the item", and the recommendation follows the counts on the
   `item keys:` line.
-- A conflict between a comment rule of the instruction files and katai's
-  comment rules (`rules.md` in the `doc-discipline` folder beside this
-  skill's base directory) on the lines the owner's change adds: which rule
-  wins there.
+- A conflict between a rule of the instruction files and a rule file of
+  katai's standards (the `standards` folder beside this skill's base
+  directory) on the lines the owner's change adds: which rule wins there.
 - Any other value a later step needs that nothing gives.
 
 In `/kt:start-next`, `milestones.md` may have asked the order of the
