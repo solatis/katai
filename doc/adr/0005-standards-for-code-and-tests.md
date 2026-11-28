@@ -36,6 +36,14 @@ where it enters, and an interface exists for implementations the tree has. A
 rule that a linter can check belongs in the repository's lint and not in a
 sentence.
 
+`names.md` holds what a name owes its reader: one name for a concept, a verb
+that says what the function does, and a short local name where the
+function's name gives the role. `code.md` also asks that a call shows what
+its arguments mean, that states which exclude one another are one type, and
+that no error is dropped without a note. `tests.md` asks that a test's name
+says the behavior and that cases which differ only in their values are rows
+of one table.
+
 A rule enters either file only if a reader can point at the line that breaks
 it. Both files state kinds and no quantities.
 
@@ -65,6 +73,14 @@ with their sources.
   The tree already shows it, and a list in katai would go stale.
 - The audit of code and tests in the same run as the audit of comments. One
   run would read every rule file, and its rows would be harder to close.
+- A rule that every dependency sits behind an interface. It produces the
+  interface with one implementation that `code.md` forbids, and a function
+  that gets its store as a parameter is tested without one.
+- A rule that a branch on the type of a value moves into the type. It is
+  the idiom of one family of languages and wrong in others.
+- A level of severity on each finding, and a marker in a comment that
+  switches a rule off. A finding is fixed or declined with its reason, and
+  a note in plain words says why a line departs.
 - The tests standard before the code standard. A test is code, and the rule
   that sets a fake apart from an interface needs both files.
 

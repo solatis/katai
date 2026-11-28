@@ -44,7 +44,7 @@ there.
   change adds or rewrites where `owner: shared`, as "Held to the owner's
   lines" says below.
 - Code and tests: what the change adds or rewrites, in every repository.
-  Rule 17 of `code.md` and rule 16 of `tests.md` say so. Bringing existing
+  Rule 18 of `code.md` and rule 17 of `tests.md` say so. Bringing existing
   code or tests under the rules changes what the code does or what is
   verified, so it is work of its own and never part of another change.
 - Names: the names the change introduces.

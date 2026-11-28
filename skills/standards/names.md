@@ -17,3 +17,19 @@ pairs show the difference:
 | `Info`, for the display settings of a user  | `DisplayPreferences`    |
 | `Manager`, for what retries failed uploads  | `UploadRetrier`         |
 | `handle()`, for what records a paid invoice | `record_payment()`      |
+
+A concept has one name in a repository. Where the tree calls a thing
+`account`, a change does not call it `user` or `customer`, in a type, a
+field, a parameter or a comment. Two names tell the reader that there are
+two things.
+
+The verb of a function's name says what the function does. A function
+named `get`, `is`, `find` or `validate` changes nothing and reports. A
+function that changes state, or that returns a new value built from its
+input, is named for that, as `parse_port` and not `validate_port` for a
+function that returns the port.
+
+A local name may be one letter where the function's name gives its role:
+in `store_user(u)` the reader reads "the user". Two parameters of the same
+type whose roles the function's name does not tell apart are spelled out,
+as `transfer(source, target, amount)` and not `transfer(a, b, x)`.
