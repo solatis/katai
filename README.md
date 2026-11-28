@@ -3,13 +3,13 @@
 A staged workflow for Claude Code. A piece of work moves through four stages,
 and only your own command opens the next one:
 
-| Command                       | What it does                                                         |
-| ----------------------------- | -------------------------------------------------------------------- |
-| `/katai:start <task or item>` | reads the repository, shapes the work and puts its choices to you    |
-| `/katai:start-next`           | finds the next piece of work in the tracker and starts it            |
-| `/katai:plan`                 | writes one plan per issue and shows the plans for your review        |
-| `/katai:build`                | lands the commits, runs the comment checks, opens the pull requests  |
-| `/katai:merge`                | lands each approved pull request and draws lessons from your reviews |
+| Command                       | What it does                                                           |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| `/katai:start <task or item>` | reads the repository, shapes the work and puts its choices to you      |
+| `/katai:start-next`           | finds the next piece of work in the tracker and starts it              |
+| `/katai:plan`                 | writes one plan per issue and shows the plans for your review          |
+| `/katai:build`                | lands the commits, runs the comment checks, opens the pull requests    |
+| `/katai:merge`                | lands each approved pull request and records lessons from your reviews |
 
 The name is kata plus AI. katai is also a Japanese word for firm, rigid and
 stubborn, which describes an opinionated workflow well.
@@ -27,7 +27,11 @@ Claude Code then loads katai from that clone. An edit in the clone is what
 the next session runs, and a running session takes it after `/reload-plugins`.
 
 katai keeps its plans under `~/.local/state/katai`, outside every checkout, so
-that a cleared session and a linked worktree find them. In the default
+that a cleared session and a linked worktree find them. After a unit of work
+merges, katai writes what your reviews remarked to a lessons record under
+`~/.local/state/katai/lessons` and changes no rule. You read the records of
+several units together and decide which rules change, so that no rule swings
+on the remarks of a single unit. In the default
 permission mode Claude Code asks before each read outside the working
 directory. To stop that, list the folder under
 `permissions.additionalDirectories` in your user settings.

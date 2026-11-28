@@ -239,7 +239,7 @@ That is the workflow working.
   `branch: closed` lines list them; a plan whose item is closed
   (`gh issue view <n> --json state` for a GitHub issue, else through the
   skill that covers the tracker). Untracked files are never a leftover. An
-  open pull request of a `rules-` branch belongs to a postmortem and is no
+  open pull request of a `rules-` branch belongs to a rule change and is no
   leftover.
 - A local branch with no pull request and no plan is neither: it is no
   candidate for anything.
@@ -314,6 +314,27 @@ channel ("Asking and reviews").
   document: the build's audit checks that, and the merge deletes the plan
   only once each row of the audit file that did not land is applied or
   declined.
+
+## Lessons
+
+- The lessons folder of a repository is
+  `~/.local/state/katai/lessons/github.com/<owner>/<repo>/`, with the
+  owner and the repository of the `github:` line. Like the plans folder, it
+  lies outside every checkout, and nothing in it is committed or pushed.
+  The first stage that writes a file there creates the folder.
+- It holds one record per unit, `<unit>.md`, which the merge stage writes
+  from the postmortem's answer after the unit's last pull request has
+  merged, and until then `<unit>-asked.md`, the katai rule changes the
+  owner asked for during the unit, as "Changing a rule" says. A record lists the owner's marks on the unit's reviews, sorts
+  them, and names for each class the rule that covers it, what failed and
+  its home. It proposes no rule text.
+- No stage turns a record into a rule change. The owner reads the records
+  of several units together, of every repository, and changes a rule when
+  the same class shows across them, as "Changing a rule" says. One unit's
+  marks are too few to weigh a sentence against its opposite, and a rule
+  rewritten after each unit swings between them.
+- A record stays until the owner deletes it. It may quote the owner's words
+  and the repository's names, because it stays on this machine.
 
 ## Handing a step to a skill
 
@@ -413,14 +434,16 @@ change costs before the owner approves it.
    such a rule rewrites its record in the same commit. katai's rules have
    their records in katai's `doc/adr/`. A repository without records, and
    the owner's own configuration, have none, and the proposal says so.
-8. A pause. A sentence that a postmortem changed changes again only after
+8. A pause. A sentence that a rule change changed changes again only after
    one unit has been built under it. The owner's own words lift the pause.
 
-A stage asks the owner for a rule change in the postmortem, after the last
-pull request of a unit has merged. During a review the build fixes the
+No stage asks the owner for a rule change. The postmortem records the
+unit's lessons, as "Lessons" says, and a rule changes when the owner reads
+the records together and asks for it. During a review the build fixes the
 places the owner remarked on and asks for no rule change. When the owner
 writes that a rule changes now, it changes in that build, in a commit of its
-own. A lesson about how the owner wants the work done goes into a rule file
+own, except a rule of katai, which changes only from a session in katai's
+own clone. A lesson about how the owner wants the work done goes into a rule file
 through this section. A memory note may point at the rule, and it holds no
 lesson of its own.
 
@@ -432,41 +455,41 @@ how the owner works across repositories goes to the owner's own
 configuration. A lesson takes the home of the sentence that covers it; with
 none, the proposal names its home and the owner's answer may move it.
 
-How each lands, once the owner accepts it:
+How each lands, once the owner asks for it:
 
-- katai. The lesson is stated in general words and quotes nothing from the
-  repository it came from: no file name, no code and no other person's
-  remark, because katai is public and that repository may be private. The
-  evidence stays with the review. katai's clone is the plugin root, two
-  folders above this skill's directory (`${CLAUDE_SKILL_DIR}/../..`). The
-  lesson lands on a branch `rules-<unit>` in a worktree of that clone, as
-  the clone's `AGENTS.md` says: one commit per accepted proposal, each with
-  its record change, a pull request to the clone's origin with an empty
-  body, its own review, and a fast-forward of `main`. Then
-  `git -C <clone> pull --ff-only` brings it to every new session. Where the
-  plugin root is no clone the owner can push from, show the owner the
-  accepted text instead.
-- The owner's own repository. The same: a branch `rules-<unit>` against its
-  tracked instruction files and its decision records, a pull request with
+- katai. A stage in another repository never edits katai. Where the owner
+  asks there for a katai rule to change, add the owner's words, dated, to
+  `<unit>-asked.md` in the lessons folder, and say so in the stage's
+  message. The postmortem carries them into the unit's record. The change itself is made in a session in katai's
+  clone, as the clone's `AGENTS.md` says, and is stated in general words
+  that quote nothing from the repositories the records came from: no file
+  name, no code and no other person's remark, because katai is public and
+  those repositories may be private.
+- The owner's own repository. A commit to its tracked instruction files and
+  its decision records, on the branch of the build where the owner asked
+  during a build, else on a branch `rules-<name>` with a pull request with
   an empty body and its own review, landed by the repository's merge style.
 - A shared repository. Write the accepted sentence into the local note and
   show it in the closing message, with no commit and no record.
 - The owner's own configuration. Edit the accepted sentence into its file
   and show the diff in the closing message.
 
-The owner's answer to a proposal is a yes to its text, not to a commit, so
-a lesson that lands as a commit gets its own review.
+The owner's request is a yes to the change's text, not to a commit, so a
+lesson that lands as a commit gets its own review.
 
 Correct: the owner remarks on a missing step number in two reviews. After
-the merge, the postmortem proposes to reword the one sentence that the build
-had read another way, quotes the owner's earlier "don't go overboard with
-the numbering", and says why the new sentence adds no numbers. The owner
-picks it, and the change lands as a rules pull request with its record.
+the merge, the postmortem records the class, the sentence that the build had
+read another way, and the owner's earlier "don't go overboard with the
+numbering", and asks nothing. Some units later the owner reads the records,
+finds the same class in two other repositories, and rewords the one
+sentence in a session in katai's clone, with its decision record.
 
 Incorrect: the owner writes "too much prose" at three doc comments in one
 review, and the session caps every comment at two lines in the next commit.
 One review is a place, the cap reaches comments the remarks were not about,
-and the sentence sets a quantity.
+and the sentence sets a quantity. Or: the postmortem's record names a class
+whose home is katai, and the merge session opens a rules pull request
+against katai's clone from the repository it merged in.
 
 ## Lifecycle
 
@@ -479,12 +502,12 @@ question inside the current stage, or it is a remark on what the current
 stage produced. An approval of a review approves that review and opens no
 stage either.
 
-| Stage    | Opened by                                                  | You produce                                                                                                                                                                                                                                                                                                                                                      | You never                                                                                                                            | Ends with                                               |
-| -------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| 1. Seed  | `/katai:start <description or items>`, `/katai:start-next` | the seed report in the plans folder and in the conversation; on the first unit in a shared repository, the orientation in the local note; in `/katai:start-next`, the close of a met milestone where `milestones.md` allows it                                                                                                                                   | write plans, create tracker items, branch, commit, or write any other file                                                           | a wait for `/katai:plan`                                |
-| 2. Plan  | `/katai:plan`                                              | the tracker items that do not exist yet, one plan per issue that passes the step check, the values asked once in the local note or, where own, in the first plan's Knowledge section, the review of all plans, and on approval `Status: approved` in each and the seed report deleted                                                                            | touch code, tests, config or any tracked file; branch; commit                                                                        | the plan-stage message, then a wait for `/katai:build`  |
-| 3. Build | `/katai:build [item ...]`                                  | per issue: the branch, the plan's commits, the comment checks, the push, the pull request, its CI, the other reviewers' comments put to the owner, and one review per pull request                                                                                                                                                                               | merge; deviate from a plan without saying so; invent a reason for a comment                                                          | the build-stage message, then a wait for `/katai:merge` |
-| 4. Merge | `/katai:merge [item ...]`                                  | per pull request, bottom of a stack first: the landing in the repository's merge style, the release lines of `Lands on:`, the item closed or left as "Units and issues" says, the plan deleted, the milestone closed where the pull request completed it; after the last pull request of a unit, the postmortem and the landing of the lessons the owner accepts | merge a head that is not the reviewed head, or one that GitHub would not accept; merge without the owner having typed `/katai:merge` | one line per merged pull request                        |
+| Stage    | Opened by                                                  | You produce                                                                                                                                                                                                                                                                                                                                    | You never                                                                                                                            | Ends with                                               |
+| -------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| 1. Seed  | `/katai:start <description or items>`, `/katai:start-next` | the seed report in the plans folder and in the conversation; on the first unit in a shared repository, the orientation in the local note; in `/katai:start-next`, the close of a met milestone where `milestones.md` allows it                                                                                                                 | write plans, create tracker items, branch, commit, or write any other file                                                           | a wait for `/katai:plan`                                |
+| 2. Plan  | `/katai:plan`                                              | the tracker items that do not exist yet, one plan per issue that passes the step check, the values asked once in the local note or, where own, in the first plan's Knowledge section, the review of all plans, and on approval `Status: approved` in each and the seed report deleted                                                          | touch code, tests, config or any tracked file; branch; commit                                                                        | the plan-stage message, then a wait for `/katai:build`  |
+| 3. Build | `/katai:build [item ...]`                                  | per issue: the branch, the plan's commits, the comment checks, the push, the pull request, its CI, the other reviewers' comments put to the owner, and one review per pull request                                                                                                                                                             | merge; deviate from a plan without saying so; invent a reason for a comment                                                          | the build-stage message, then a wait for `/katai:merge` |
+| 4. Merge | `/katai:merge [item ...]`                                  | per pull request, bottom of a stack first: the landing in the repository's merge style, the release lines of `Lands on:`, the item closed or left as "Units and issues" says, the plan deleted, the milestone closed where the pull request completed it; after the last pull request of a unit, the postmortem's record in the lessons folder | merge a head that is not the reviewed head, or one that GitHub would not accept; merge without the owner having typed `/katai:merge` | one line per merged pull request                        |
 
 A session may begin at any stage, from the plans folder, the tree and
 GitHub. `/katai:start` with no argument reports where each plan stands and

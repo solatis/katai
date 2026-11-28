@@ -12,7 +12,6 @@ alternatives and Consequences. A part with nothing recorded says so.
 A change to a rule of weight in a skill writes or rewrites its record in the
 same commit, as "Changing a rule" in `skills/workflow/SKILL.md` asks.
 
-No record is written yet.
-
-| Record | Decision |
-| ------ | -------- |
+| Record                                     | Decision                                           |
+| ------------------------------------------ | -------------------------------------------------- |
+| [0001](0001-postmortem-records-lessons.md) | The postmortem records lessons and changes no rule |
