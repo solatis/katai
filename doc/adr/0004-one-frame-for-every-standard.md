@@ -67,6 +67,4 @@ Every stage that named `kt:doc-discipline`, `kt:doc-read`, `kt:doc-audit` or
 `kt:cold-reader` or `kt:auditor`. A repository's instruction file that names
 the old skills by name needs the new names.
 
-A third stance, an attacker that looks for the case a plan or a built change
-does not survive, is not part of this decision. It waits until a unit has
-been built under the standards for code and tests.
+Record 0006 adds a third stance, the attacker.

@@ -75,7 +75,7 @@ PLAN_KEYS = ("Status", "Item", "Unit", "Branch", "Base")
 # A plan's header lines come first in the file, so a key further down is text.
 PLAN_HEADER_LINES = 20
 CHECK_FILE_SUFFIXES = ("-read-1.md", "-read-2.md", "-audit.md", "-audit-code.md",
-                       "-audit-tests.md")
+                       "-audit-tests.md", "-plan-attack.md", "-build-attack.md")
 
 NOTE_PATH = os.path.join(".claude", "AGENTS.md")
 NOTE_EXCLUDE_LINE = ".claude/AGENTS.md"

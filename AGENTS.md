@@ -13,14 +13,16 @@ that change katai itself.
   clone and loads it from there.
 - `skills/` holds one folder per skill. `start`, `start-next`, `plan`, `build`
   and `merge` are the commands the owner types. `workflow`, `seed`,
-  `postmortem`, `standards`, `read` and `audit` are loaded by
-  those and never typed.
+  `postmortem`, `standards`, `read`, `audit`, `attack-plan` and
+  `attack-build` are loaded by those and never typed.
 - `skills/workflow/SKILL.md` holds what every stage shares. The "Changing a
   rule" section of `skills/workflow/rule-changes.md` beside it holds for
   every change to a skill here.
 - `agents/` holds one read-only agent per stance. `read` runs on
   `cold-reader.md`, which knows no rule and reports where it stops. `audit`
-  runs on `auditor.md`, which holds each line against a rule. An agent
+  runs on `auditor.md`, which holds each line against a rule. `attack-plan`
+  and `attack-build` run on `attacker.md`, which assumes each claim is
+  false and builds the case that shows it. An agent
   file says how its reader thinks, and a skill says what is read and how
   the answer is formed.
 - `skills/standards/` holds the frame every standard shares in `SKILL.md`,

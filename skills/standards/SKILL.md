@@ -129,10 +129,15 @@ line on stdout is
 means findings, and 2 means a usage or git error. A skipped file is no
 finding.
 
-## The two checks that run in a subagent
+## The checks that run in a subagent
 
-Two companion skills run in a subagent of their own: `kt:read` on the
-agent `kt:cold-reader`, and `kt:audit` on the agent `kt:auditor`. An agent
+Four companion skills run in a subagent of their own: `kt:read` on the
+agent `kt:cold-reader`, `kt:audit` on the agent `kt:auditor`, and
+`kt:attack-plan` and `kt:attack-build` on the agent `kt:attacker`. The
+cold reader knows no rule and no plan and reports where it stops. The
+auditor knows the rules and reports each line that breaks one. The
+attacker knows the claims and no rule, and reports each claim it broke
+with the case that breaks it. An agent
 file says how its reader thinks, and the skill says what it reads and how
 it answers. Call each through the
 Skill tool, with the words after its name as its arguments. The subagent sees
@@ -166,7 +171,13 @@ without quotes or spaces.
   range held to `lines`, or the path of a plan, whose Design and Tests part
   are then audited before any code exists.
 
-The caller of `kt:read` passes the range or the paths and the part
+- `kt:attack-plan <plan>` takes the path of one plan, and
+  `kt:attack-build <base>...HEAD` the range of a built change, and nothing
+  else. Each returns one row per finding, then what held and what it could
+  not read.
+
+The caller of an attack passes the plan or the range alone, for the same
+reason as the caller of `kt:read`. The caller of `kt:read` passes the range or the paths and the part
 number alone, because the reader is useful only while it does not know what
 the author knows. The caller of `kt:audit` adds facts about the task,
 and never its view of the result.
@@ -190,7 +201,7 @@ each reason from evidence it can name: a line of code, a test, a document it
 moves or a commit. It asks the owner for a reason it has no evidence for. Ask
 the owner the way the owner's instructions say, and end your turn until the
 answer comes; where they say nothing, ask in this conversation. An agent that
-the session starts reports and writes nothing. Both companion skills run on
+the session starts reports and writes nothing. The companion skills run on
 agents that have no tool that writes, so they cannot change a file.
 
 ## Hard limits

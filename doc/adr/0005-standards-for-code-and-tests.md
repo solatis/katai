@@ -77,6 +77,4 @@ A build runs two more audits, and a plan stage two. Each reads one or two
 rule files and the lines of one change.
 
 The form check cannot tell whether a named kind is the right one. That is
-for the audits and the owner. Whether the audits find what a determined
-reader would find is not yet known: an attacker for the plan and one for the
-built change wait until a unit has been built under these standards.
+for the audits, the attack of record 0006 and the owner.
