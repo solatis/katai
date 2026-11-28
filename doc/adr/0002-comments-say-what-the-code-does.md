@@ -39,7 +39,7 @@ macro or a generic helper.
 A comment gives one concrete case where it states a rule about values, and
 none where its line already shows the case.
 
-The table of "Prose" in `rules.md` shows sentences that read like a
+The table of `prose.md` shows sentences that read like a
 specification next to what a colleague would write. `narrative.md` shows four
 cases of how much a comment says: short and right, long and right, short and
 wrong, long and wrong. The examples come from no real project.

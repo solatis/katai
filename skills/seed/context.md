@@ -85,6 +85,20 @@ owner before any plan is written. Gather them now:
 - The reviewer: the one the instruction files name, else the one the skill
   that covers pull requests names. Where neither names one, the `approvals:`
   line is history's answer, for the challenge round.
+- The kinds of test the repository has, as `tests.md` of `kt:standards`
+  draws them: for each of unit, integration and end-to-end, where its
+  tests live, the command that runs them and how a live system reaches
+  them, each from an instruction file or from the tree. A kind the tree
+  does not show is reported as absent, and the unit tests with the kinds
+  that are there.
+- How the language spells the standards: the library that draws test
+  inputs and the lint that carries rules for code, from the dependency
+  manifest and the lint configuration.
+- Where the repository keeps its rules for comments, code and tests: the
+  instruction file, the document or the decision records that hold them,
+  each at `path:line`. A sentence found there that conflicts with a rule
+  file of `kt:standards` and does not name the rule is noted for the
+  challenge round.
 - For each existing item: the item, and the skill that read it.
 
 Each value has a source: a printed line, an instruction file at

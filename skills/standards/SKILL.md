@@ -1,24 +1,58 @@
 ---
-name: doc-discipline
-description: The comment and documentation guide of the katai stages -- the rules for comments and prose, where a piece of knowledge lives, the checks after a change, and the repair of existing code and documents. Loaded before code, a plan or a document is written.
+name: standards
+description: The standards of the katai stages -- one rule file per subject, how a repository departs from a rule, the checks after a change, and the repair of existing code and documents. Loaded before code, a plan or a document is written.
 user-invocable: false
 ---
 
-# Documentation discipline
+# Standards
 
-This skill is a guide. Its rules for comments and prose are `rules.md` in
-this skill's directory, one set for every repository. The guide says how to
-apply them, and its references show examples. Read `rules.md` first.
+This skill is a guide. A standard is a rule file in this skill's directory
+for one subject, one set for every repository. The guide says how the
+standards are applied, checked and departed from, and its references show
+examples. Read the rule file of a subject before you write anything of that
+subject.
 
 Where documents live and what they hold is the repository's own policy. It is
 the "Documentation strategy" section of the root `AGENTS.md`, which the
 stage's `root AGENTS.md:` line shows, and the `AGENTS.md` of the
 documentation folder that the section names (`doc/` or `docs/`). Read them
-where they exist. Where the repository's instruction files give a rule for
-comments or prose that conflicts with `rules.md`, the sentence in the
-instruction file that settles the conflict decides. A conflict that no
-sentence settles is a question for the owner, and the answer is kept as one
-sentence in the instruction file, so that it is not asked again.
+where they exist.
+
+## Where a repository departs from a rule
+
+A rule file here is the default. A sentence in the repository's instruction
+files outranks a sentence in the owner's own configuration, and both outrank
+a rule file here. A departure is one sentence that names the rule it departs
+from, says what holds instead and why, and carries its date.
+
+What the code or the tests of a repository already do is never a rule,
+however often they do it. Where they do what a rule here forbids and no
+sentence says so, the change follows the rule in what it adds, and a design
+that follows the existing code instead is a Rationale row of the plan marked
+`proposal`.
+
+A sentence that conflicts with a rule here and does not name it may be a
+departure or may be older than the rule. It is a question for the owner,
+asked once, when a commit of the unit would meet the conflict. The answer is
+kept as one sentence, so that it is not asked again. The seed's report says
+where this repository keeps its rules for the subject, and the sentence goes
+there.
+
+## What a change is held to
+
+- Comments and documents: whole files where `owner: own`, and the lines the
+  change adds or rewrites where `owner: shared`, as "Held to the owner's
+  lines" says below.
+- Code and tests: what the change adds or rewrites, in every repository.
+  Rule 17 of `code.md` and rule 16 of `tests.md` say so. Bringing existing
+  code or tests under the rules changes what the code does or what is
+  verified, so it is work of its own and never part of another change.
+- Names: the names the change introduces.
+
+How the language spells a rule, such as the library that draws test inputs
+or the lint that carries a rule for code, is read from the tree. A fact of
+one repository, such as a port, a fixture or a command, lives in its
+instruction files. Neither is written into a rule file here.
 
 The guide works from what the stage printed. Where no stage printed an
 `owner:` line, the repository counts as shared.
@@ -54,31 +88,37 @@ Where the repository has no "Documentation strategy":
 
 ## Files
 
-| File                      | Read it                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------- |
-| `rules.md`                | before anything else: the rules for comments and prose                                          |
-| `narrative.md`            | before you write or change code, or the sketches of a plan                                      |
-| `placement.md`            | before you write or move a document, or a comment that holds knowledge                          |
-| `names.md`                | before you name a type, a trait, a function, a field, a module or a file                        |
-| `checks.md`               | after a change is complete, before it leaves the session                                        |
-| `scripts/check_steps.py`  | the step check: it checks walkthrough numbers, back-references and denied marks                 |
-| `scripts/change_parts.py` | the part list: it splits a change, or the files under given paths, into parts for `kt:doc-read` |
+| File                      | Read it                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| `comments.md`             | before you write or change code or a sketch: the rules for comments                         |
+| `prose.md`                | before you write a sentence of a comment or a document                                      |
+| `narrative.md`            | before you write or change code, or the sketches of a plan                                  |
+| `placement.md`            | before you write or move a document, or a comment that holds knowledge                      |
+| `names.md`                | before you name a type, a trait, a function, a field, a module or a file                    |
+| `code.md`                 | before you sketch or write a function, a type or a module                                   |
+| `tests.md`                | before you sketch or write a test                                                           |
+| `checks.md`               | after a change is complete, before it leaves the session                                    |
+| `scripts/check_steps.py`  | the step check: it checks walkthrough numbers, back-references and denied marks             |
+| `scripts/change_parts.py` | the part list: it splits a change, or the files under given paths, into parts for `kt:read` |
 
 ## The scripts
 
 The scripts are in `scripts/` under this skill's base directory, which the
 first line of this guide names when it loads ("Base directory for this
 skill"). Run them by that absolute path, so that they work in any checkout and
-any directory. The step check runs in one of four forms:
+any directory. The step check runs in one of five forms:
 
 ```
+python3 <base directory>/scripts/check_steps.py --plan <plan.md>
 python3 <base directory>/scripts/check_steps.py [--deny REGEX]... [--warn] <path>...
 python3 <base directory>/scripts/check_steps.py [--deny REGEX]... --git-range <base>...<rev> [--markdown-too] [--lines <base>...<rev>]
 python3 <base directory>/scripts/check_steps.py --markdown <file.md>
 python3 <base directory>/scripts/check_steps.py --words <any words>
 ```
 
-Step 1 of `checks.md` names the deny patterns. `--lines <range>` keeps only
+`--plan` checks the sketches of a plan as `--markdown` does, and also its
+Tests part: each test sketch names its kind, what it pins, why it has its
+level and its fakes. Step 1 of `checks.md` names the deny patterns. `--lines <range>` keeps only
 the findings on the lines that `git diff -U0 <range>` adds or changes. For a
 git range, the check prints one line `skipped <path>: <reason>` on stderr,
 before the findings, for each changed file whose comment syntax it does not
@@ -91,14 +131,16 @@ finding.
 
 ## The two checks that run in a subagent
 
-Two companion skills, `kt:doc-read` and `kt:doc-audit`, run in a
-subagent of their own on the agent `kt:doc-reader`. Call each through the
+Two companion skills run in a subagent of their own: `kt:read` on the
+agent `kt:cold-reader`, and `kt:audit` on the agent `kt:auditor`. An agent
+file says how its reader thinks, and the skill says what it reads and how
+it answers. Call each through the
 Skill tool, with the words after its name as its arguments. The subagent sees
 none of the conversation, and its last message comes back to the caller. The
 skill passes its first words to a script, so each of them is one plain word
 without quotes or spaces.
 
-- `kt:doc-read` takes the range of a change, or one or more paths joined
+- `kt:read` takes the range of a change, or one or more paths joined
   by commas, and the number of one part, and nothing else. For paths, the
   parts hold the tracked files under them whole. The script leaves out the
   files it also leaves out of a range, such as lock files and binary files.
@@ -112,16 +154,21 @@ without quotes or spaces.
   does, each sentence it had to untangle, each term the code defines that a
   comment uses before any comment explains it, and each term or statement in
   a document it could not place.
-- `kt:doc-audit <scope> [lines] [plan: <plan>] [focus: ...] [also: ...]`
+- `kt:audit <scope> [lines] [plan: <plan>] [focus: ...] [also: ...]`
   takes a range or one path. `lines` holds it to the lines the change adds or
   rewrites. It may also take a plan to reconcile against, a focus that limits
   the checks, and the paths of documents that belong to the task, which the
   subagent reads itself. It returns the report of the "Report" section below,
-  with each change it proposes as a row.
+  with each change it proposes as a row. Without a focus it audits comments
+  and documents. With `focus: code` it holds the scope against `code.md` and
+  `names.md`, and with `focus: tests` against `tests.md`, each in a run of
+  its own, so that no run reads every rule file. The scope of those two is a
+  range held to `lines`, or the path of a plan, whose Design and Tests part
+  are then audited before any code exists.
 
-The caller of `kt:doc-read` passes the range or the paths and the part
+The caller of `kt:read` passes the range or the paths and the part
 number alone, because the reader is useful only while it does not know what
-the author knows. The caller of `kt:doc-audit` adds facts about the task,
+the author knows. The caller of `kt:audit` adds facts about the task,
 and never its view of the result.
 
 ## Held to the owner's lines
@@ -131,9 +178,9 @@ the change adds or rewrites. Where it printed `owner: own`, every check covers
 whole files. "Held to the owner's lines" in `checks.md` says how each check
 is held to those lines: the step check takes `--lines <base>...HEAD`, a
 reader's stop on a line the change does not touch is declined with that
-reason, and `kt:doc-audit` gets the token `lines`. A comment block that
+reason, and `kt:audit` gets the token `lines`. A comment block that
 another author wrote is not rewritten whole. A finding in it is listed in the
-review's "Comment checks" and left. Rule 13 of "Code comments", which
+review's "Checks" and left. Rule 13 of `comments.md`, which
 rewrites a touched block whole, holds for the owner's own blocks.
 
 ## Who writes
@@ -144,9 +191,12 @@ moves or a commit. It asks the owner for a reason it has no evidence for. Ask
 the owner the way the owner's instructions say, and end your turn until the
 answer comes; where they say nothing, ask in this conversation. An agent that
 the session starts reports and writes nothing. Both companion skills run on
-an agent that has no tool that writes, so they cannot change a file.
+agents that have no tool that writes, so they cannot change a file.
 
 ## Hard limits
+
+These limits hold for the comments and documents of a change and for their
+repair.
 
 1. Comments and documentation files only. When existing code is repaired,
    never change what code does: no renames, no reordering, no refactors, no
@@ -155,7 +205,7 @@ an agent that has no tool that writes, so they cannot change a file.
 2. Never invent rationale. A comment may only state what you verified from the
    code, the tests, the docs you are moving, or git history. If the "why" is
    unknown, write the "what" and ask the owner for the reason.
-   `kt:doc-audit` lists the gap under "Rationale unknown" as a question.
+   `kt:audit` lists the gap under "Rationale unknown" as a question.
    Every "why" you intend to write names its evidence in the plan table of
    `narrative.md` or `placement.md`: a `file:line`, a test, the passage being
    moved, or a commit. The evidence stays in the plan; it does not go into
@@ -169,7 +219,7 @@ an agent that has no tool that writes, so they cannot change a file.
    of another author is reported as the section above says.
 4. Code that needs a comment gets it. A missing note at a line where the
    reader stops is as much a defect as a note that repeats its line. A
-   function that qualifies for a walkthrough under `rules.md` gets one,
+   function that qualifies for a walkthrough under `comments.md` gets one,
    whether or not any reader stopped in it. Deleting a comment that fails the
    cut pass in `narrative.md` is as much the job as writing a missing one.
 5. ASCII only. Match the comment syntax, doc-comment convention and line width
@@ -182,11 +232,11 @@ an agent that has no tool that writes, so they cannot change a file.
 A session that is asked to bring existing code and documents under the rules
 works as follows:
 
-1. Read `rules.md` and the repository's policy files. If the root `AGENTS.md`
+1. Read `comments.md`, `prose.md` and the repository's policy files. If the root `AGENTS.md`
    has no "Documentation strategy" section, stop and say so; the repair runs
    only where the repository has one.
-2. Run `kt:doc-audit <path>` for one component directory at a time, leaf
-   directories first. Several `kt:doc-audit` calls for independent
+2. Run `kt:audit <path>` for one component directory at a time, leaf
+   directories first. Several `kt:audit` calls for independent
    components may run side by side. Keep each report as it came back.
 3. Apply each report row by row. Write a reason only from the evidence its
    row names, or from evidence you find yourself. Ask the owner for each
@@ -201,7 +251,7 @@ works as follows:
 5. Follow `checks.md` over the commits of the repair, with one difference in
    the first reader round, which is step 2 of `checks.md`. Where that step
    lists the parts of the range of the change, a repair lists the parts of the
-   paths that it gave to `kt:doc-audit`, so that a reader also reads the
+   paths that it gave to `kt:audit`, so that a reader also reads the
    functions that the repair left as they were. The second reader round, step
    4 of `checks.md`, reads its range as `checks.md` says.
 6. Report, in the form of the "Report" section, with the rows applied and
@@ -212,7 +262,7 @@ works as follows:
 A plan document says what the comments and documents were going to be,
 written while the reasons were still in context; the code says what they
 became. The gap between the two is where reasons get lost, because the plan
-is deleted once its work lands. `kt:doc-audit` follows these steps when
+is deleted once its work lands. `kt:audit` follows these steps when
 its caller names a plan:
 
 1. Collect every promise the plan makes about prose: each claim in the
@@ -237,7 +287,7 @@ its caller names a plan:
 
 ## Report
 
-Keep the report short, and list its rows. `kt:doc-audit` writes the Run
+Keep the report short, and list its rows. `kt:audit` writes the Run
 line first, then its plan tables, then each other section as proposed
 changes. A session that repairs code writes each section as changes made.
 
@@ -248,14 +298,18 @@ changes. A session that repairs code writes each section as changes made.
 - Commented: functions whose comments were written or rewritten.
 - Removed: stale, duplicate, historical or noise comments and doc passages.
 - Discoverability: `AGENTS.md` Map rows added or changed.
-- Wording: sentences in comments or documents that break the "Prose" rules
-  of `rules.md`, each with the rule it breaks.
+- Wording: sentences in comments or documents that break the rules of
+  `prose.md`, each with the rule it breaks.
 - Rationale unknown: places where the why could not be verified, each as a
   question for the owner.
 - Unlanded from the plan: reasons the plan document promised that no comment
   or document states; "none" when a plan was given and all landed.
 - Dropped on purpose: plan promises that failed the cut pass, one line each
   with the defect.
+- Code, Tests: with `focus: code` or `focus: tests`, one row per line that
+  breaks a rule, as `<path>:<line> | <rule file> rule <n> | <what is
+there> | <the change, or the question>`. A line that breaks no rule the
+  reader can cite gets no row.
 - Needs a human: code-level findings outside this skill's limits (split
   candidates, misleading names, dead or commented-out code, doc budget
   overruns that cannot be fixed by moving).

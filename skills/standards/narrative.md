@@ -1,17 +1,17 @@
 # Comments inside functions
 
-Goal: the reader that `rules.md` defines can change a function safely after
+Goal: the reader that `comments.md` defines can change a function safely after
 reading its doc comment, its walkthrough when it has one, and its notes. Each
 fact sits at the scope it is about, and every comment describes the code as
 it is today.
 
-The rules are "Code comments" and "Prose" in `rules.md`. This file says how
+The rules are `comments.md` and `prose.md`. This file says how
 to apply them and shows examples. The examples are illustrations of shape. Do
 not copy their wording or their semantics.
 
 ## Which level a function gets
 
-Each function gets one of three levels. Rule 2 of "Code comments" says when a
+Each function gets one of three levels. Rule 2 of `comments.md` says when a
 function qualifies for each, which functions are bare whatever else is true
 of them, and that the first level that applies wins. The levels, in the
 order of the test:
@@ -45,7 +45,7 @@ instead.
 
 ## Sizes and the step check
 
-Rule 10 of "Code comments" gives the size of each kind of comment. A comment
+Rule 10 of `comments.md` gives the size of each kind of comment. A comment
 above its size usually holds a second fact. Split it, and move each fact to
 the step or the line it concerns.
 
@@ -502,7 +502,7 @@ already shows the fact. The length of the code does not decide either.
 5. When the walkthrough needs more than about seven steps, the function is a
    split candidate. Comment it as it is and list it under "Needs a human".
    A standard algorithm, and a body that tests a chain of independent cases,
-   get a walkthrough without numbers, as rule 4 of "Code comments" says.
+   get a walkthrough without numbers, as rule 4 of `comments.md` says.
 6. Read the comments back in three passes, in this order:
    1. Truth. Read each comment as a separate claim and check it against the
       code directly below it. Check each walkthrough item against the code
@@ -524,14 +524,14 @@ already shows the fact. The length of the code does not decide either.
       - a mark of who decided something or when, which belongs in the
         decision record
       - a citation of a decision record in a form other than the one rule 16
-        of "Code comments" names
+        of `comments.md` names
       - an implementation detail in a doc comment that a caller does not
         need
       - a rejected alternative that a reader of that line would not propose
       - a sentence that reads like one of the "Written" sentences in the
-        table of "Prose" in `rules.md`
+        table of `prose.md`
    3. Gaps. The session that wrote the code does not judge its own gaps,
-      because it already knows what each line does. It runs `kt:doc-read`
+      because it already knows what each line does. It runs `kt:read`
       as `checks.md` says and closes each stop the reader lists. An audit
       lists each line where the reader would stop, and each function that
       qualifies for a walkthrough and has none, as a question under

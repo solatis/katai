@@ -79,7 +79,7 @@ anything:
 3. Delete the source passage. If the source needs to keep the topic visible,
    leave a pointer of one line at most: what, and which file.
 4. Shape the result per `narrative.md`, within the sizes that rule 10 of
-   "Code comments" in `rules.md` gives. Text above the signature is
+   `comments.md` gives. Text above the signature is
    for callers. Text on how a function works goes into the walkthrough inside
    the body, when the function qualifies for one.
 5. After writing the destination comment, read it back as a list of separate
@@ -115,5 +115,5 @@ While here, run every check the documentation folder's `AGENTS.md` lists
 order it prescribes for component `AGENTS.md` files. Overruns are fixed by
 moving knowledge down the ladder, never by splitting a document into more
 documents. What cannot be fixed by moving goes in the report. Read each
-sentence in scope against "Prose" in `rules.md`, and list each sentence that
+sentence in scope against `prose.md`, and list each sentence that
 breaks one of its rules under "Wording".

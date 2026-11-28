@@ -91,8 +91,8 @@ the stage only through that print.
    pull request title of the seed report that holds the item's key as a
    placeholder gets the key now, as `kt:workflow`, "Names", says.
 
-2. Load `kt:doc-discipline` through the Skill tool, and read its
-   `narrative.md` and `placement.md`.
+2. Load `kt:standards` through the Skill tool, and read its
+   `narrative.md`, `placement.md`, `code.md` and `tests.md`.
 3. Read `${CLAUDE_SKILL_DIR}/plan-shape.md`, and write one plan per
    issue, `<slug>-plan.md` in the folder of the `plans:` line, in that
    shape, with `Status: draft`. Create the folder when it is missing. The
@@ -148,18 +148,35 @@ the stage only through that print.
    commits deliver.
 
    Run the step check on each plan, with the base directory that the loaded
-   `kt:doc-discipline` shows:
+   `kt:standards` shows:
 
    ```
-   python3 <doc-discipline base directory>/scripts/check_steps.py --markdown <plans folder>/<slug>-plan.md
+   python3 <standards base directory>/scripts/check_steps.py --plan <plans folder>/<slug>-plan.md
    ```
 
-   Fix every finding in the sketches, and run the check again until its
-   last line reports 0 findings. Keep that last line of each plan for step 6. Then read every sketch whose style line says `bare`. Its `because:`
+   Fix every finding in the sketches and in the Tests part, and run the
+   check again until its last line reports 0 findings. Keep that last line
+   of each plan for step 6. Then read every sketch whose style line says
+   `bare`. Its `because:`
    line says why none of the function's lines makes the reader stop. When a
    sketch lacks that reason, write it if it holds for every line of the
    function. Otherwise sketch the notes or the walkthrough the function
    needs and change its style line.
+
+   Then audit each plan against the standards for code and tests, one run
+   per subject, before any code exists:
+
+   ```
+   kt:audit <plans folder>/<slug>-plan.md focus: code
+   kt:audit <plans folder>/<slug>-plan.md focus: tests
+   ```
+
+   Each row is closed in one of three ways: a change to the plan, a
+   Rationale row marked `proposal` that names the rule the plan departs
+   from and why, so that the owner rules on it in step 6, or a decline with
+   its reason. Keep the rows and how each was closed for step 6. The audits
+   run once per plan and not again after a redirect, unless the redirect
+   changes the Design or the Tests part.
 
 6. Show all of the unit's draft plans for review in one message, in landing
    order, so that the owner sees a plan before the plan that stacks on it.
@@ -167,7 +184,8 @@ the stage only through that print.
 
    The body, per plan in landing order: one line saying what the issue
    delivers, one line with the last line of the plan's step check from step
-   5, then three labeled lists. "Settled by you:" and "Proposed here:" are
+   5, one line per row of the plan's two audits that was declined, with the
+   rule and the reason, then three labeled lists. "Settled by you:" and "Proposed here:" are
    built from the plan's Rationale rows, every row in exactly one of them.
    - "Settled by you:" one line per owner row, the decision and the date,
      nothing else.

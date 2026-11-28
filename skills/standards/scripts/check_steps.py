@@ -9,6 +9,9 @@ check reads line comments, knows how each language writes strings and
 comments, and finds the scope of a walkthrough from the indentation of
 formatted code. It knows no grammar.
 
+With --plan the check also reads the Tests part of a plan, where each test
+sketch names its kind, what it pins, why it has its level and its fakes.
+
 The check takes files and directories, the files that a git range changed, or
 with --words the words of a person passed on unchanged. The words before the
 first word that ends with a colon, such as "focus:", are the scope, and the
@@ -678,6 +681,10 @@ RULES = {
     "W2": "a walkthrough item ends a sentence and says more than its back-reference",
     "W3": "a back-reference shares a content word with its item",
     "D1": "no comment matches a --deny pattern",
+    "T1": "a plan has a Tests part that holds a test sketch or says none",
+    "T2": "a test sketch names its kind: unit, integration or end-to-end",
+    "T3": "a test sketch says what it pins and why it has its level",
+    "T4": "a test sketch names each fake by its Rationale row, or says none",
 }
 
 Finding = namedtuple("Finding", "path line rule message")
@@ -967,6 +974,104 @@ def markdown_blocks(raw_lines):
         i = j + 1
 
 
+def fences(raw_lines):
+    """Return the (opener, closer) line indexes of each fenced block."""
+    out, i = [], 0
+    while i < len(raw_lines):
+        m = FENCE.match(raw_lines[i])
+        if not m:
+            i += 1
+            continue
+        j = i + 1
+        while j < len(raw_lines) and not raw_lines[j].strip().startswith(m.group(2)):
+            j += 1
+        out.append((i, j))
+        i = j + 1
+    return out
+
+
+# ---------------------------------------------------------------------------
+# The Tests part of a plan
+# ---------------------------------------------------------------------------
+
+# A Markdown heading, with the number some plans put before the title.
+HEADING = re.compile(r"^(#{1,6})\s+(?:\d+\.\s*)?(.+?)\s*$")
+# A line of a test sketch that states one of its four facts, behind the
+# comment marker of any language, such as "// kind: unit" or "# fake: none".
+TEST_FACT = re.compile(r"^\s*(?://+|#+|--+|;+|%+|\*)?\s*(kind|pins|level|fake):\s*(.*?)\s*$")
+TEST_KINDS = ("unit", "integration", "end-to-end")
+# The lines below a heading, as indexes into the lines of the document: the
+# first line of the body, and the line after its last.
+Section = namedtuple("Section", "first end")
+
+
+def section_of(raw_lines, title, blocks):
+    """Return the Section below the first heading titled `title`, or None."""
+    # A line such as "# fake: none" inside a fenced block is no heading.
+    fenced = {k for i, j in blocks for k in range(i, j + 1)}
+    heads = [(k, HEADING.match(ln)) for k, ln in enumerate(raw_lines) if k not in fenced]
+    heads = [(k, len(m.group(1)), m.group(2)) for k, m in heads if m]
+    for n, (k, level, text) in enumerate(heads):
+        if normalized(text) == title:
+            end = next((k2 for k2, l2, _ in heads[n + 1:] if l2 <= level), len(raw_lines))
+            return Section(k + 1, end)
+    return None
+
+
+def rationale_decisions(raw_lines, blocks):
+    """Return the normalized first cell of each table row of the Rationale part."""
+    part = section_of(raw_lines, "rationale", blocks)
+    if part is None:
+        return []
+    rows = [ln.strip() for ln in raw_lines[part.first:part.end] if ln.strip().startswith("|")]
+    return [normalized(r.strip("|").split("|")[0]) for r in rows]
+
+
+def sketch_facts(body):
+    """Return the values of each fact a test sketch states, by the fact's name."""
+    facts = {}
+    for ln in body:
+        m = TEST_FACT.match(ln)
+        if m:
+            facts.setdefault(m.group(1), []).append(m.group(2))
+    return facts
+
+
+def check_sketch(path, line, body, decisions):
+    """Return the T2, T3 and T4 findings of one test sketch, which opens at `line`."""
+    facts = sketch_facts(body)
+    out = []
+    kind = (facts.get("kind") or [""])[0]
+    if kind not in TEST_KINDS:
+        out.append(Finding(path, line, "T2", "the sketch names no kind" if not kind
+                           else "the sketch names the unknown kind %r" % kind))
+    out.extend(Finding(path, line, "T3", "the sketch has no `%s:` line that says something" % f)
+               for f in ("pins", "level") if not any(facts.get(f, [])))
+    fakes = [f for f in facts.get("fake", []) if f]
+    if not fakes:
+        out.append(Finding(path, line, "T4", "the sketch has no `fake:` line"))
+    out.extend(Finding(path, line, "T4", "the fake %r names no row of the Rationale" % f)
+               for f in fakes
+               if normalized(f) != "none" and not any(normalized(f) in d for d in decisions))
+    return out
+
+
+def check_test_part(path, raw_lines):
+    """Return the T findings of a plan: its Tests part and each sketch in it."""
+    blocks = fences(raw_lines)
+    part = section_of(raw_lines, "tests", blocks)
+    if part is None:
+        return [Finding(path, 1, "T1", "the plan has no Tests heading")]
+    sketches = [(i, j) for i, j in blocks if part.first <= i < part.end]
+    if not sketches:
+        says_none = re.search(r"\bnone\b", " ".join(raw_lines[part.first:part.end]).lower())
+        return [] if says_none else [Finding(path, part.first, "T1",
+                                             "the Tests part holds no sketch and does not say none")]
+    decisions = rationale_decisions(raw_lines, blocks)
+    return [f for i, j in sketches
+            for f in check_sketch(path, i + 1, raw_lines[i + 1:j], decisions)]
+
+
 def check_source(src, opts):
     """Return the findings of one Source."""
     raw_lines = src.text.splitlines()
@@ -1123,7 +1228,7 @@ EPILOG = """\
 rules:
 %s
 
-N1 to N8 and D1 are findings. W1 to W3 are warnings, which are off by default
+N1 to N8, D1 and T1 to T4 are findings. W1 to W3 are warnings, which are off by default
 and never change the exit status.
 
 R0, which separates an item from a wrapped sentence: a comment line that
@@ -1152,6 +1257,16 @@ line indented less, or to the next walkthrough at the same or a smaller
 indentation. A numbered list below another numbered comment, or right below
 code inside the scope of a walkthrough, is a note and is reported once as
 N7.
+
+plan: --plan FILE checks a plan. Its fenced code blocks are checked as with
+--markdown. Its Tests part is the text below the heading "Tests", up to the
+next heading of the same or a higher level. The part holds one fenced block
+per test or group of tests, or the word "none". Each block has a line
+"kind:" with unit, integration or end-to-end, a line "pins:", a line
+"level:", and one line "fake:" per fake. A "fake:" line says "none" or
+repeats the first cell of a row of the table below the heading "Rationale".
+The four lines may stand behind a comment marker. A T finding names the line
+of the block's opening fence.
 
 words: --words takes the rest of the command line, so it comes after every
 other option. The scope is the words before the first word that ends with a
@@ -1217,6 +1332,9 @@ def parse_args(argv):
                         "and REV, as they are at REV. Takes no paths")
     p.add_argument("--markdown", action="append", default=[], metavar="FILE",
                    help="check the fenced code blocks of a Markdown document (repeatable)")
+    p.add_argument("--plan", action="append", default=[], metavar="FILE",
+                   help="check a plan: its fenced code blocks as --markdown does, "
+                        "and its Tests part, see \"plan\" below (repeatable)")
     p.add_argument("--markdown-too", action="store_true",
                    help="with --git-range, also check the changed .md files")
     p.add_argument("--warn", action="store_true",
@@ -1239,6 +1357,8 @@ def parse_args(argv):
                         "--git-range or --markdown")
     args = p.parse_args(options)
     args.words = words
+    # A plan is also a Markdown document, so its sketches get the N rules.
+    args.markdown = args.markdown + args.plan
     if words is not None and (args.paths or args.markdown or args.git_range):
         p.error("--words takes no paths, no --git-range and no --markdown")
     if args.git_range and (args.paths or args.markdown):
@@ -1418,7 +1538,8 @@ def main(argv=None):
     # findings when a caller joins stderr to stdout.
     for path, reason in inputs.skipped:
         print("skipped %s: %s" % (path, reason), file=sys.stderr)
-    found = sorted({f for s in inputs.sources for f in findings_of(s, opts, changed)})
+    plans = {f for p in args.plan for f in check_test_part(p, read_text(p).splitlines())}
+    found = sorted({f for s in inputs.sources for f in findings_of(s, opts, changed)} | plans)
     for f in found:
         print("%s:%d: %s: %s" % f)
     warnings = sum(1 for f in found if f.rule.startswith("W"))

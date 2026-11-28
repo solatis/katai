@@ -3,13 +3,13 @@
 A staged workflow for Claude Code. A piece of work moves through four stages,
 and only your own command opens the next one:
 
-| Command                    | What it does                                                           |
-| -------------------------- | ---------------------------------------------------------------------- |
-| `/kt:start <task or item>` | reads the repository, shapes the work and puts its choices to you      |
-| `/kt:start-next`           | finds the next piece of work in the tracker and starts it              |
-| `/kt:plan`                 | writes one plan per issue and shows the plans for your review          |
-| `/kt:build`                | lands the commits, runs the comment checks, opens the pull requests    |
-| `/kt:merge`                | lands each approved pull request and records lessons from your reviews |
+| Command                    | What it does                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| `/kt:start <task or item>` | reads the repository, shapes the work and puts its choices to you                       |
+| `/kt:start-next`           | finds the next piece of work in the tracker and starts it                               |
+| `/kt:plan`                 | writes one plan per issue and shows the plans for your review                           |
+| `/kt:build`                | lands the commits, runs the checks of code, tests and comments, opens the pull requests |
+| `/kt:merge`                | lands each approved pull request and records lessons from your reviews                  |
 
 The name is kata plus AI. katai is also a Japanese word for firm, rigid and
 stubborn, which describes an opinionated workflow well.

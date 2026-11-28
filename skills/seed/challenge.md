@@ -77,10 +77,14 @@ value they give is not asked.
   makes each item and gives its key at the plan stage" and "no item, the
   plan is the item", and the recommendation follows the counts on the
   `item keys:` line.
-- A conflict between a comment rule of the instruction files and katai's
-  comment rules (`rules.md` in the `doc-discipline` folder beside this
-  skill's base directory) on the lines the owner's change adds: which rule
-  wins there.
+- A conflict between a rule of the instruction files and a rule file of
+  katai's standards (the `standards` folder beside this skill's base
+  directory) on what the owner's change adds: which rule wins there. With
+  it, where the answer is kept. Propose the place where this repository
+  already keeps its rules for the subject, as the context step found it,
+  and the form of "Where a repository departs from a rule" in
+  `kt:standards`. katai fixes no place, so the place is proposed for each
+  case and the owner rules on it.
 - Any other value a later step needs that nothing gives.
 
 In `/kt:start-next`, `milestones.md` may have asked the order of the
