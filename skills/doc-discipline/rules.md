@@ -125,17 +125,9 @@ walkthrough, and notes at single lines.
     opens with the word owner. The decision record says how the decision was
     made, and it may carry that trace.
 
-This is the primary path: new code is written this way. `SKILL.md` beside
-this file is the guide for applying these rules. A stage loads it once,
-before it writes code, a plan or a document, and follows its `checks.md`
-after a change is complete. Two checks run in a subagent of their own and
-change no file. `katai:doc-read <base>...HEAD <part>` takes the range of a
-change and the number of one of its parts, and returns each line of that part
-where a reader who has not seen the change stops. `katai:doc-audit <scope>`
-takes a range or a path and returns the changes these rules call for as rows
-of a report. `katai:doc-audit <scope> plan: <plan>` also reconciles the code
-against the plan. The session that owns a change writes its comments and
-documents from evidence it can name, and it asks the owner where it has none.
+This is the primary path: new code is written this way. "The two checks
+that run in a subagent" and "Who writes" in `SKILL.md` say how a change is
+checked against these rules and who writes its comments.
 
 The step check, `scripts/check_steps.py`, enforces the numbering of
 walkthroughs and back-references. It also reports the two forms that the last
