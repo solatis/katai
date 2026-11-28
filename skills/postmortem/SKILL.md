@@ -1,6 +1,6 @@
 ---
 name: postmortem
-description: After the last pull request of a unit has merged, reads the owner's remarks on the unit's reviews. With `candidates`, returns the candidate lessons for the owner to pick from; with `draft`, returns the draft of the lessons record for the lessons the owner picked, each with its evidence and a before and after taken from the work. Proposes and changes no rule. Loaded twice by the merge stage with the unit's slug; never invoked by the owner.
+description: Reads the owner's remarks on the reviews of a merged katai unit and returns the candidate lessons or the draft of the lessons record. Changes no rule. Loaded by the merge stage with the unit's slug and `candidates` or `draft`; never invoked by the owner.
 user-invocable: false
 context: fork
 background: false

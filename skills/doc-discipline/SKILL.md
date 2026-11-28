@@ -1,6 +1,6 @@
 ---
 name: doc-discipline
-description: The comment and documentation guide of the katai stages, which load it before they write code, a plan or a document. It holds the rules for comments and prose, and says where a piece of knowledge lives, which checks run after a change, and how existing code and documents are brought under the rules.
+description: The comment and documentation guide of the katai stages -- the rules for comments and prose, where a piece of knowledge lives, the checks after a change, and the repair of existing code and documents. Loaded before code, a plan or a document is written.
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: workflow
-description: The katai workflow -- the owner, units and issues, names, branches and commits, how to read what the stage printed, plans, handing a step to a skill, asking and reviews, changing a rule, and the stages a unit of work moves through with the owner's command as the gate between them. Loaded at the top of every stage skill and by the seed and postmortem skills; never invoked by the owner.
+description: The rules that every katai stage shares. Loaded by name at the top of every stage skill and by the seed and postmortem skills; never invoked by the owner.
 user-invocable: false
 ---
 
