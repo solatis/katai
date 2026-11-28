@@ -15,8 +15,9 @@ that change katai itself.
   and `merge` are the commands the owner types. `workflow`, `seed`,
   `postmortem`, `doc-discipline`, `doc-read` and `doc-audit` are loaded by
   those and never typed.
-- `skills/workflow/SKILL.md` holds what every stage shares, and its "Changing
-  a rule" section holds for every change to a skill here.
+- `skills/workflow/SKILL.md` holds what every stage shares. The "Changing a
+  rule" section of `skills/workflow/rule-changes.md` beside it holds for
+  every change to a skill here.
 - `agents/doc-reader.md` is the read-only agent that `doc-read` and
   `doc-audit` run on.
 - `scripts/repo_state.py` runs at the start of every stage and prints what

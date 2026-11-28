@@ -10,7 +10,7 @@ Each record has the same parts: `Date`, then Context, Decision, Rejected
 alternatives and Consequences. A part with nothing recorded says so.
 
 A change to a rule of weight in a skill writes or rewrites its record in the
-same commit, as "Changing a rule" in `skills/workflow/SKILL.md` asks.
+same commit, as "Changing a rule" in `skills/workflow/rule-changes.md` asks.
 
 | Record                                          | Decision                                                            |
 | ----------------------------------------------- | ------------------------------------------------------------------- |

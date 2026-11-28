@@ -211,6 +211,9 @@ needs, and the close of the pull request's item.
 
 ## The postmortem
 
+Read `${CLAUDE_SKILL_DIR}/../workflow/rule-changes.md` whole before the
+steps below. "Lessons" and "Changing a rule" are its sections.
+
 A unit is complete when no plan in the plans folder names it on its `Unit:`
 line, which holds from any checkout. List the plans folder again after step
 5, because the script's list is from the start of the stage. After the last
@@ -224,7 +227,7 @@ pull request of this run, do this for each unit that this run completed:
 2. On `no record`, add that line to the closing lines below, and stop here
    for this unit.
 3. Write the candidates as they came into `<lessons>/<unit>-candidates.md`,
-   where `<lessons>` is the lessons folder of `katai:workflow`, "Lessons".
+   where `<lessons>` is the lessons folder that "Lessons" names.
    Create the folder where it does not exist. The file is how a cleared
    session finds where the postmortem stands.
 4. Ask the owner which lessons to capture, in one question where the owner

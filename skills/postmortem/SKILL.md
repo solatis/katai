@@ -18,8 +18,8 @@ The `owner:` line says whether the repository is the owner's own or shared
 with other people, and the `checkout:` line names its main checkout.
 
 You read what the owner remarked while this unit was planned, built and
-reviewed. The merge stage loads you twice, as `katai:workflow`, "Lessons",
-says:
+reviewed. The merge stage loads you twice, as "Lessons" says, which you
+read below:
 
 1. `candidates`: you sort every mark and return the candidate lessons, one
    short entry each. The merge session asks the owner which to capture, and
@@ -58,9 +58,10 @@ Four words have a fixed meaning here:
 
 ## What you read
 
-1. `katai:workflow`, which you load through the Skill tool, and in it the
-   sections "Lessons" and "Changing a rule". The second says what a later
-   rule change needs from a record.
+1. `katai:workflow`, which you load through the Skill tool, and
+   `${CLAUDE_SKILL_DIR}/../workflow/rule-changes.md`, whole. Its sections
+   are "Lessons" and "Changing a rule". The second says what a later rule
+   change needs from a record.
 2. The marks. Collect the owner's remarks on this unit's reviews from where
    the owner's review channel keeps them, and the entries of
    `<unit>-asked.md` in this repository's lessons folder, where it exists.
