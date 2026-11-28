@@ -20,11 +20,39 @@ where they exist.
 
 ## Where a repository departs from a rule
 
-Where the instruction files give a rule that conflicts with a rule file
-here, the sentence in the instruction file that settles the conflict
-decides. A conflict that no sentence settles is a question for the owner,
-and the answer is kept as one sentence in the instruction file, so that it
-is not asked again.
+A rule file here is the default. A sentence in the repository's instruction
+files outranks a sentence in the owner's own configuration, and both outrank
+a rule file here. A departure is one sentence that names the rule it departs
+from, says what holds instead and why, and carries its date.
+
+What the code or the tests of a repository already do is never a rule,
+however often they do it. Where they do what a rule here forbids and no
+sentence says so, the change follows the rule in what it adds, and a design
+that follows the existing code instead is a Rationale row of the plan marked
+`proposal`.
+
+A sentence that conflicts with a rule here and does not name it may be a
+departure or may be older than the rule. It is a question for the owner,
+asked once, when a commit of the unit would meet the conflict. The answer is
+kept as one sentence, so that it is not asked again. The seed's report says
+where this repository keeps its rules for the subject, and the sentence goes
+there.
+
+## What a change is held to
+
+- Comments and documents: whole files where `owner: own`, and the lines the
+  change adds or rewrites where `owner: shared`, as "Held to the owner's
+  lines" says below.
+- Code and tests: what the change adds or rewrites, in every repository.
+  Rule 17 of `code.md` and rule 16 of `tests.md` say so. Bringing existing
+  code or tests under the rules changes what the code does or what is
+  verified, so it is work of its own and never part of another change.
+- Names: the names the change introduces.
+
+How the language spells a rule, such as the library that draws test inputs
+or the lint that carries a rule for code, is read from the tree. A fact of
+one repository, such as a port, a fixture or a command, lives in its
+instruction files. Neither is written into a rule file here.
 
 The guide works from what the stage printed. Where no stage printed an
 `owner:` line, the repository counts as shared.
@@ -67,6 +95,8 @@ Where the repository has no "Documentation strategy":
 | `narrative.md`            | before you write or change code, or the sketches of a plan                                  |
 | `placement.md`            | before you write or move a document, or a comment that holds knowledge                      |
 | `names.md`                | before you name a type, a trait, a function, a field, a module or a file                    |
+| `code.md`                 | before you sketch or write a function, a type or a module                                   |
+| `tests.md`                | before you sketch or write a test                                                           |
 | `checks.md`               | after a change is complete, before it leaves the session                                    |
 | `scripts/check_steps.py`  | the step check: it checks walkthrough numbers, back-references and denied marks             |
 | `scripts/change_parts.py` | the part list: it splits a change, or the files under given paths, into parts for `kt:read` |
@@ -76,16 +106,19 @@ Where the repository has no "Documentation strategy":
 The scripts are in `scripts/` under this skill's base directory, which the
 first line of this guide names when it loads ("Base directory for this
 skill"). Run them by that absolute path, so that they work in any checkout and
-any directory. The step check runs in one of four forms:
+any directory. The step check runs in one of five forms:
 
 ```
+python3 <base directory>/scripts/check_steps.py --plan <plan.md>
 python3 <base directory>/scripts/check_steps.py [--deny REGEX]... [--warn] <path>...
 python3 <base directory>/scripts/check_steps.py [--deny REGEX]... --git-range <base>...<rev> [--markdown-too] [--lines <base>...<rev>]
 python3 <base directory>/scripts/check_steps.py --markdown <file.md>
 python3 <base directory>/scripts/check_steps.py --words <any words>
 ```
 
-Step 1 of `checks.md` names the deny patterns. `--lines <range>` keeps only
+`--plan` checks the sketches of a plan as `--markdown` does, and also its
+Tests part: each test sketch names its kind, what it pins, why it has its
+level and its fakes. Step 1 of `checks.md` names the deny patterns. `--lines <range>` keeps only
 the findings on the lines that `git diff -U0 <range>` adds or changes. For a
 git range, the check prints one line `skipped <path>: <reason>` on stderr,
 before the findings, for each changed file whose comment syntax it does not
@@ -126,7 +159,12 @@ without quotes or spaces.
   rewrites. It may also take a plan to reconcile against, a focus that limits
   the checks, and the paths of documents that belong to the task, which the
   subagent reads itself. It returns the report of the "Report" section below,
-  with each change it proposes as a row.
+  with each change it proposes as a row. Without a focus it audits comments
+  and documents. With `focus: code` it holds the scope against `code.md` and
+  `names.md`, and with `focus: tests` against `tests.md`, each in a run of
+  its own, so that no run reads every rule file. The scope of those two is a
+  range held to `lines`, or the path of a plan, whose Design and Tests part
+  are then audited before any code exists.
 
 The caller of `kt:read` passes the range or the paths and the part
 number alone, because the reader is useful only while it does not know what
@@ -156,6 +194,9 @@ the session starts reports and writes nothing. Both companion skills run on
 agents that have no tool that writes, so they cannot change a file.
 
 ## Hard limits
+
+These limits hold for the comments and documents of a change and for their
+repair.
 
 1. Comments and documentation files only. When existing code is repaired,
    never change what code does: no renames, no reordering, no refactors, no
@@ -265,6 +306,10 @@ changes. A session that repairs code writes each section as changes made.
   or document states; "none" when a plan was given and all landed.
 - Dropped on purpose: plan promises that failed the cut pass, one line each
   with the defect.
+- Code, Tests: with `focus: code` or `focus: tests`, one row per line that
+  breaks a rule, as `<path>:<line> | <rule file> rule <n> | <what is
+there> | <the change, or the question>`. A line that breaks no rule the
+  reader can cite gets no row.
 - Needs a human: code-level findings outside this skill's limits (split
   candidates, misleading names, dead or commented-out code, doc budget
   overruns that cannot be fixed by moving).

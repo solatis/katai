@@ -1784,6 +1784,80 @@ class CSharp(unittest.TestCase):
             _, lines, _ = main_output(["--markdown", os.path.join(d, "plan.md")])
         self.assertEqual([f.split(": ")[1] for f in lines[:-1]], ["N2"] * 3)
 
+class PlanTestsPart(unittest.TestCase):
+    """The T rules of --plan, on plans built from a seed that a failure prints."""
+
+    KINDS = ("unit", "integration", "end-to-end")
+    MARKERS = ("// ", "# ", "-- ", "")
+
+    def sketch(self, rng, fake):
+        """Return the fact lines of one valid test sketch, by the fact's name."""
+        m = rng.choice(self.MARKERS)
+        return {"kind": "%skind: %s" % (m, rng.choice(self.KINDS)),
+                "pins": "%spins: a decoded value equals the encoded one" % m,
+                "level": "%slevel: the decoder stands alone" % m,
+                "fake": "%sfake: %s" % (m, fake)}
+
+    def plan(self, sketches, rows=("the mail server is faked",)):
+        """Return the lines of a plan with one fenced block per sketch."""
+        out = ["# Plan", "", "## Rationale", "", "| decision | why |", "| --- | --- |"]
+        out += ["| %s | it cannot run here |" % r for r in rows]
+        out += ["", "## Design", "", "### Tests", ""]
+        for lines in sketches:
+            out += ["```text"] + lines + ["```", ""]
+        return out + ["## Knowledge", "", "none"]
+
+    def rules(self, lines):
+        return sorted(f.rule for f in cs.check_test_part("plan.md", lines))
+
+    def test_valid_sketches_have_no_finding_and_each_missing_fact_has_its_own(self):
+        seed = random.randrange(1 << 32)
+        rng = random.Random(seed)
+        missing = {"kind": "T2", "pins": "T3", "level": "T3", "fake": "T4"}
+        for _ in range(200):
+            # The valid fake values: none, or the first cell of a Rationale row
+            # in another case.
+            facts = [self.sketch(rng, rng.choice(("none", "The mail server is FAKED")))
+                     for _ in range(rng.randint(1, 4))]
+            whole = [rng.sample(list(f.values()), 4) for f in facts]
+            self.assertEqual(self.rules(self.plan(whole)), [], "seed %d" % seed)
+            # Dropping one fact of one sketch gives that fact's rule and no other.
+            at, gone = rng.randrange(len(facts)), rng.choice(sorted(missing))
+            broken = [[v for k, v in f.items() if (i, k) != (at, gone)]
+                      for i, f in enumerate(facts)]
+            self.assertEqual(self.rules(self.plan(broken)), [missing[gone]], "seed %d" % seed)
+
+    def test_unknown_kind(self):
+        lines = self.plan([["kind: smoke", "pins: x", "level: y", "fake: none"]])
+        self.assertEqual(self.rules(lines), ["T2"])
+
+    def test_fake_that_names_no_rationale_row(self):
+        lines = self.plan([["kind: unit", "pins: x", "level: y", "fake: the clock is faked"]])
+        self.assertEqual(self.rules(lines), ["T4"])
+
+    def test_part_without_sketch_says_none_or_is_a_finding(self):
+        head = ["# Plan", "", "## Tests", ""]
+        self.assertEqual(self.rules(head + ["none"]), [])
+        self.assertEqual(self.rules(head + ["The tests come later."]), ["T1"])
+        self.assertEqual(self.rules(["# Plan", "", "## Design", "", "text"]), ["T1"])
+
+    def test_fact_line_in_a_fenced_block_is_no_heading(self):
+        # "# fake: none" in a block would otherwise end the Tests part early.
+        lines = self.plan([["# kind: unit", "# pins: x", "# level: y", "# fake: none"],
+                           ["# kind: bogus", "# pins: x", "# level: y", "# fake: none"]])
+        self.assertEqual(self.rules(lines), ["T2"])
+
+    def test_command_line_reports_the_fence_line_and_counts_the_plan(self):
+        lines = self.plan([["kind: unit", "pins: x", "fake: none"]])
+        with tempfile.TemporaryDirectory() as d:
+            write(d, "plan.md", "\n".join(lines) + "\n")
+            p = os.path.join(d, "plan.md")
+            status, out, _ = main_output(["--plan", p])
+        self.assertEqual(status, 1)
+        self.assertEqual(out[0], "%s:%d: T3: the sketch has no `level:` line that says something"
+                         % (p, lines.index("```text") + 1))
+        self.assertEqual(out[-1], "check_steps: 1 finding in 1 file")
+
 
 if __name__ == "__main__":
     unittest.main()

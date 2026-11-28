@@ -90,7 +90,8 @@ its branches, such as `branch: merged <k> (<branch> #<n>, ...)`:
 ## The commits
 
 Load `kt:standards` through the Skill tool once, before the first
-code commit of the session, and read its `narrative.md` and `placement.md`.
+code commit of the session, and read its `narrative.md`, `placement.md`,
+`code.md` and `tests.md`.
 Then, issue by issue in landing order:
 
 1. Cut the branch. For an issue on the base, cut it from origin's base as
@@ -140,6 +141,32 @@ Then, issue by issue in landing order:
    written from evidence you can name. A reason you would have to invent is
    asked of the owner before the commit that needs it, never written as a
    guess and never left out silently.
+
+   The tests of a commit are those of the plan's Tests part, each of the
+   kind its entry names. A test the code forces that the plan did not
+   sketch follows `tests.md`, and it is named in the build-stage message
+   with its kind. A fake of a subsystem that no Rationale row names is
+   asked of the owner before the commit that needs it.
+
+   After the last code commit and before step 3, audit the code and the
+   tests, as "Code and tests" in `checks.md` says, each in a run of its
+   own:
+
+   ```
+   kt:audit <base>...HEAD lines plan: <plans folder>/<slug>-plan.md focus: code
+   kt:audit <base>...HEAD lines plan: <plans folder>/<slug>-plan.md focus: tests
+   ```
+
+   Save each report verbatim, as `<slug>-audit-code.md` and
+   `<slug>-audit-tests.md` in the plans folder. Close each row with a
+   commit that passes what this step asks of a commit, a question to the
+   owner, or a decline with its reason, and append one line per row to its
+   file, `<path>:<line> | applied <sha>`, `<path>:<line> | question` or
+   `<path>:<line> | declined: <reason>`. A run with nothing to read, such
+   as the tests audit of a change that adds no test, is skipped, and the
+   review says so. These audits run before the checks of comments because
+   their rows change code, and the readers then read the code as it will
+   merge.
 
    Steps 3 to 9 check the comments after the last code commit. They follow
    `checks.md` of `kt:standards` with the commands below. Run each
@@ -394,8 +421,12 @@ For each pull request:
      then each comment of another reviewer with the owner's answer and the
      commit that applied it.
    - Last in the body, a section "Checks", built from the files
-     `<slug>-read-1.md`, `<slug>-read-2.md` and `<slug>-audit.md` and from
-     a run of the step check of step 3 at the pushed head:
+     `<slug>-audit-code.md`, `<slug>-audit-tests.md`, `<slug>-read-1.md`,
+     `<slug>-read-2.md` and `<slug>-audit.md` and from a run of the step
+     check of step 3 at the pushed head:
+     - the first line of the code audit and of the tests audit, which
+       repeats the call, and each of their rows as applied, asked or
+       declined with its reason, or the line that the run was skipped
      - the last line of the step check, and each `skipped <path>: <reason>`
        line it printed; the readers read the files of these lines all the
        same, except a directory's line, which counts changed files of

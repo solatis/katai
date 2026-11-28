@@ -1,7 +1,10 @@
 # The checks after a change
 
 The session that owns a change runs these checks after its last code commit
-and before the change leaves the session. Each check is a script's output or
+and before the change leaves the session. The checks run in the order of how
+much their fixes change. The audits of code and tests come first, because a
+row of theirs changes code. The checks of comments follow, because they
+read the code as it then is. Each check is a script's output or
 another agent's answer, and the session saves each answer where the stage
 says. `<base>` is the revision the change started from. `<base directory>` is
 the absolute path of this skill's directory, which the first line of the
@@ -22,6 +25,19 @@ Where the stage printed `owner: own`, every check covers whole files.
   rewritten whole. A finding in it is listed under "Checks" in the
   review and left as it is. Rule 13 of `comments.md`, which
   rewrites a touched block whole, holds for the owner's own blocks.
+
+## Code and tests
+
+Before the steps below, when the change adds or rewrites code, run
+`kt:audit <base>...HEAD lines focus: code`, and when it adds or rewrites
+tests, run `kt:audit <base>...HEAD lines focus: tests`. A change with a
+plan adds `plan: <plan>`, and the tests audit then also holds each test
+against its entry in the plan's Tests part. Both carry `lines` in every
+repository, because code and tests are held only to what a change adds or
+rewrites. Save each report verbatim. Close each row in one of three ways: a
+commit that changes the code or the test, a question to the owner, or a
+decline with its reason. A row about a line the change did not add or
+rewrite is declined as outside the change.
 
 ## The steps
 
@@ -89,7 +105,8 @@ conversation. A comment that waits for an answer is written after it arrives.
 
 ## What the reviewer sees
 
-The review's "Checks" shows the last line of each step check, each
+The review's "Checks" shows the rows of the code audit and the tests audit,
+each with how it was closed. It shows the last line of each step check, each
 `skipped` line, every stop with its closure, every decline with its reason,
 each finding left in a block of another author, and the rows of the audit as
 applied or declined. Each stop gets one of these lines:

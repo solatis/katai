@@ -22,7 +22,8 @@ placement ladder the build stage is held to, so the plan's comment
 specifications and homes name that shape from the start rather than
 repaired after. The guide's vocabulary names the shapes; the plan is still
 read by someone who has not loaded it, so every shape and reason is said in
-plain words. "The comment rules" below are the rules that guide applies.
+plain words. "The comment rules" below are the rules that guide applies. Step 2 has also
+read `code.md` and `tests.md`, which the Design and its tests are held to.
 
 ## Header
 
@@ -117,7 +118,11 @@ it is never dropped.
    author wrote is named with what the change does to it, and the build
    leaves its wording. Document rows (an `AGENTS.md` bullet, a paragraph of
    a document) are sketched the same way: a fenced block of bullets under
-   the heading they will join. Tests are designed the same way.
+   the heading they will join.
+
+   The Design ends with a part under the heading "Tests", which "The tests"
+   below describes. A plan whose issue adds or changes no test writes
+   "none" there, with the reason.
 
 5. Knowledge. Per commit, where each why of sections 2 and 4 lands: the
    commented functions with the evidence for each reason of every claim;
@@ -243,6 +248,53 @@ about one line, which belongs in a note at that line. Or a parser of thirty
 functions carries a handful of note claims, so the build lands those and
 leaves the closures and patterns of the helpers bare. Or every item names a
 rejected alternative, so the code reads like the planning session.
+
+## The tests
+
+Tests are designed in the plan as functions are, under the rules of
+`tests.md` of `kt:standards`. The Design's part under the heading "Tests"
+holds one fenced block per test, or per group of tests that share a
+fixture and a kind. Each block is the test's sketch, in the form of "The
+sketch" above, and carries four lines:
+
+```rust
+// kind: integration
+// pins: a record stored through the router is read back unchanged
+// level: the route needs the real store, and no unit holds this logic
+// fake: none
+#[test]
+fn <name>() {
+    <pseudo-code anchor, illustrative>
+}
+```
+
+- `kind:` is `unit`, `integration` or `end-to-end`, by what the test
+  touches, as rules 2 to 4 of `tests.md` draw them.
+- `pins:` says what a caller can rely on after this test passes.
+- `level:` says why this kind reaches the behavior and the kind below it
+  does not. For a unit test it says why the logic stands alone and is easy
+  to get wrong.
+- `fake:` is `none`, or the decision cell of the Rationale row that allows
+  the fake, word for word. A sketch has one `fake:` line per fake.
+
+A property test names in its sketch what is drawn and what holds for each
+drawn value. A new case in an existing structure of tests names that
+structure instead of a new shape. A behavior the change adds and no test
+of the plan reaches is named below the blocks with the reason, such as
+"the exit code: only the process shows it, and the repository has no
+end-to-end tests". The first test of a kind the repository does not have
+is a Rationale row marked `proposal`.
+
+`check_steps.py --plan` checks the form: the heading, the four lines of
+each block, and that each fake names a Rationale row. Whether the kind is
+the right one is for the audit of the plan and for the owner.
+
+Incorrect: the plan says "tests: cover the new route", so the build
+decides the kind, and the owner meets a test that starts the binary only
+in the pull request. Or: every handler gets a unit test against a fake
+store, and no Rationale row names the fake. Or: the `level:` line says
+"integration tests are more realistic", which is true of every test and
+says nothing about this one.
 
 ## The plan ends with a verified head
 

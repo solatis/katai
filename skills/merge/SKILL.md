@@ -183,7 +183,8 @@ request its base branch belongs to):
 
    ```
    rm -f <plans folder>/<slug>-plan.md <plans folder>/<slug>-read-1.md \
-     <plans folder>/<slug>-read-2.md <plans folder>/<slug>-audit.md
+     <plans folder>/<slug>-read-2.md <plans folder>/<slug>-audit.md \
+     <plans folder>/<slug>-audit-code.md <plans folder>/<slug>-audit-tests.md
    ```
 
    Every reason the plan carried is then in the code or the documents, or

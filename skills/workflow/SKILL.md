@@ -287,9 +287,9 @@ channel ("Asking and reviews").
   - `<unit>-seed.md`, the seed report. The seed writes it, and the plan
     stage deletes it once every plan of the unit is approved.
   - `<slug>-plan.md`, one plan per issue.
-  - `<slug>-read-1.md`, `<slug>-read-2.md` and `<slug>-audit.md`, the
-    build's check files: the answers of its two cold reads and of its
-    audit.
+  - `<slug>-read-1.md`, `<slug>-read-2.md`, `<slug>-audit.md`,
+    `<slug>-audit-code.md` and `<slug>-audit-tests.md`, the build's check
+    files: the answers of its two cold reads and of its audits.
 - A plan starts with these header lines, in this order. They are how every
   stage finds an issue's item, unit, branch, base, title and state.
 
