@@ -1,6 +1,6 @@
 ---
 name: postmortem
-description: After the last pull request of a unit has merged, reads the owner's remarks on the unit's reviews and returns proposals, each with its home, for the rules that would have prevented the remarks that recur. Loaded by the merge stage with the unit's slug; never invoked by the owner.
+description: After the last pull request of a unit has merged, reads the owner's remarks on the unit's reviews and returns the text of the unit's lessons record: every mark sorted, and for each recurring class the rule that covers it, what failed and its home. Proposes and changes no rule. Loaded by the merge stage with the unit's slug; never invoked by the owner.
 user-invocable: false
 context: fork
 background: false
@@ -18,9 +18,17 @@ The `owner:` line says whether the repository is the owner's own or shared
 with other people, and the `checkout:` line names its main checkout.
 
 You read what the owner remarked while this unit was planned, built and
-reviewed. You return proposals for the rules that would have prevented the
-remarks that recur. You change no file, and you send no message. Your answer
-is the text of one message, and the merge session asks the owner with it.
+reviewed, and you return the text of one lessons record: every mark, its
+sort, and for each class the rule that covers it, what failed and where a
+lesson would live. You change no file, you send no message, and you propose
+no rule text. The merge session writes your answer into the lessons folder,
+as `katai:workflow`, "Lessons", says, and asks the owner nothing.
+
+A rule changes later, when the owner reads the records of several units
+together. One unit's marks are few, and a rule rewritten after each unit
+swings from one unit's complaint to the next one's opposite. So the record
+holds the evidence and the diagnosis, and the sentence is written when the
+records are read together.
 
 Four words have a fixed meaning here:
 
@@ -31,23 +39,27 @@ Four words have a fixed meaning here:
 - A review is one message of the agent that the owner marked: the plan
   review, or the review of one pull request head.
 - A class is a kind of defect that recurs.
-- A proposal is one change to a rule file, or one added check, that would
-  have prevented a class.
+- A record is the file of one unit in the lessons folder.
 
 ## What you read
 
 1. `katai:workflow`, which you load through the Skill tool, and in it the
-   section "Changing a rule". It holds the requirements that every proposal
-   meets.
+   sections "Lessons" and "Changing a rule". The second says what a later
+   rule change needs from a record.
 2. The marks. Collect the owner's remarks on this unit's reviews from where
-   the owner's review channel keeps them. Where it keeps none, say that
-   there is nothing to learn from.
+   the owner's review channel keeps them, and the entries of
+   `<unit>-asked.md` in this repository's lessons folder, where it exists.
+   An entry there is a mark whose sort is a class, because the owner asked
+   for the rule to change. Where neither keeps a remark, say that there is
+   nothing to record.
 3. Each review of the unit. A pull request's review names the pull request
    and the head, and after a reply it names the rule sentence the build had
    followed at the marked places.
 4. The commits that answered each reply, with
    `git log --oneline <head the reply marked>..<head of the next review>`.
-5. The rule files of the three layers that "Changing a rule" lists, and the
+5. The records of earlier units, in every repository's folder under
+   `~/.local/state/katai/lessons/`.
+6. The rule files of the three layers that "Changing a rule" lists, and the
    decision records:
    - this repository's instruction files: its tracked `AGENTS.md` and
      `CLAUDE.md` files, its record folder, and where the repository is
@@ -67,9 +79,9 @@ Give every mark one of three sorts:
   recurs.
 - A class: marks of the same kind appear in two reviews or more, or the
   owner's words say that it recurs, such as "again", "always" or "you
-  keep". The reviews of earlier units count. Find them through the owner's
-  review channel in every project, with two or three wordings of the same
-  complaint.
+  keep". The reviews of earlier units count. Find them in the records of
+  earlier units and through the owner's review channel in every project,
+  with two or three wordings of the same complaint.
 
 Many marks in one review count as one review. They show how large the
 defect is, and they do not show that it recurs.
@@ -77,107 +89,85 @@ defect is, and they do not show that it recurs.
 Then say for each class which of four things failed. Quote the rule sentence
 that covers the class, or say that none does.
 
-| What failed                              | How you can tell                                                           | The proposal                                |
-| ---------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
-| No rule covers it                        | no sentence in a rule file speaks to it                                    | a sentence where none was                   |
-| A rule covers it, but it is unclear      | the build quoted the sentence and read it another way than the owner       | the same sentence, reworded                 |
-| A rule covers it, and it was not applied | the sentence is clear, and the build skipped it                            | a check that cannot be skipped, and no text |
-| The rule asks for the wrong thing        | the build applied the sentence as written, and the owner marked the result | the sentence, changed                       |
+| What failed                              | How you can tell                                                           |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| No rule covers it                        | no sentence in a rule file speaks to it                                    |
+| A rule covers it, but it is unclear      | the build quoted the sentence and read it another way than the owner       |
+| A rule covers it, and it was not applied | the sentence is clear, and the build skipped it                            |
+| The rule asks for the wrong thing        | the build applied the sentence as written, and the owner marked the result |
 
-A class that open rule work already covers gets one line and no proposal.
-Open rule work is an open pull request on a `rules-` branch, in this
-repository or in katai, or a rule change that waits for the owner's answer.
+Then search the owner's earlier remarks for the opposite complaint, as
+requirement 5 of "Changing a rule" says, and quote up to three of them. A
+class that open rule work already covers says so. Open rule work is an open
+pull request on a `rules-` branch, in this repository or in katai.
 
-## Write the proposals
-
-Hold each proposal to every requirement of "Changing a rule", in the order
-that section gives them, and write down what you found for each. A
-requirement that you did not write down counts as not met. A proposal that
-fails a requirement is dropped, and your answer names it under "Dropped". A
-decision record that the requirements ask for exists for katai and for a
-repository with a record folder; a lesson for a repository without one, or
-for the owner's own configuration, has none, and the proposal says so.
-
-Write at most four proposals, the ones with the most reviews behind them, so
-that a unit's postmortem costs the owner one message of at most four
-questions and one small review. Name the others in one line each under
-"Waiting".
-
-Name a home for each proposal. A lesson has one of three homes. A lesson
-that holds unchanged for any repository, such as code standards, planning
-style or the workflow, is a change to katai. A lesson about this
-repository's code, build, layout or people is a sentence in this
-repository's instruction file. A lesson about how the owner works across
-repositories goes to the owner's own configuration. A lesson takes the home
-of the sentence that covers it; with none, the proposal names its home and
-the owner's answer may move it. A proposal whose home is katai words its
-sentence in general words and names nothing of this repository, because
-katai is public; the marks behind it stay in the question's context.
+Name a home for each class. A lesson has one of three homes. A lesson that
+holds unchanged for any repository, such as code standards, planning style
+or the workflow, is a change to katai. A lesson about this repository's
+code, build, layout or people is a sentence in this repository's
+instruction file. A lesson about how the owner works across repositories
+goes to the owner's own configuration. A class takes the home of the
+sentence that covers it; with none, name the home that fits.
 
 ## Your answer
 
-When the unit has no class, answer with one line and nothing else:
+When neither the owner's review channel nor `<unit>-asked.md` keeps a
+remark on the unit, answer with one line and nothing else:
 
 ```
-no class: <n> marks in <m> reviews (<k> decisions, <p> places)
+no record: no remarks kept on this unit
 ```
 
-When the owner's review channel keeps no remarks on the unit, the line is
-`no class: no remarks kept on this unit, so there is nothing to learn from`.
-
-Otherwise answer with the text of the message, in this form, one question
-per proposal:
+Otherwise answer with the text of the record, in this form:
 
 ```
-Marks in this unit: <n> in <m> reviews: <count> <kind>, <count> <kind>, ...
+Unit: <unit>
+Repository: github.com/<owner>/<repo>, <own | shared>
+Date: <YYYY-MM-DD>
+Pull requests: #<n> at <head sha>, ...
+Marks: <n> in <m> reviews: <k> decisions, <p> places, <c> in classes
 
-Covered by open rule work: <class>, by <the pull request or the waiting change>.
+## Class: <the kind of defect, in a few words>
 
-Question: <What should change, as a question?>
+- Marks: "<the owner's words>" (<date>, <review>, <kind of place>); ...
+- Earlier units: "<the owner's words>" (<date>, <record or project>); ...
+- Covering rule: "<the sentence>" (<file>, <section>), or none
+- What failed: <one of the four>, because <how you can tell>
+- Opposite complaints: "<the owner's words>" (<date>, <project>); ...
+- Home: <katai | this repository's instruction file | the owner's own configuration>, because <reason>
+- Open rule work: <the pull request>
 
-<Two to four sentences. The marks, each with its date and its review. The
-rule sentence that covers the class, quoted, or that none does. Which of the
-four things failed. The earlier marks in the opposite direction that you
-found, quoted, and why the change does not provoke them.>
+## Places
 
-Home: <katai | this repository's instruction file | the owner's own configuration>, because <reason>.
+- "<the owner's words>" (<date>, <review>, <kind of place>): followed "<rule sentence>", or no rule; fixed in <sha>
 
-- <label>: <the sentence as it would read, or the check, with its file>
-- <label>: <a second way to do it>
-- No change: <what stays as it is>
+## Decisions
 
-Recommended: <one label, word for word>, because <the reason, in one clause>
-
-Not a class: "<the owner's words>" (<review>), once.
-Dropped: <proposal>, because <the requirement it failed>.
-Waiting: <class>, <n> reviews.
+- "<the owner's words>" (<date>, <review>)
 ```
 
-A line with nothing under it is left out. The choices stand in their natural
-order, and "No change" is always the last one. The recommendation stands
-after the choices, never in a label. Add nothing before the first line or
-after the last.
+A kind of place is one of those requirement 1 of "Changing a rule" lists. A
+line or a section with nothing under it is left out. The record quotes the
+owner's words and the repository's names as they are, because it stays on
+this machine; whoever later turns it into a change to katai states the
+change in general words. Add nothing before the first line or after the
+last.
 
-You are done when every mark has a sort, every class has its line or its
-proposal, and each proposal has its home and has passed every requirement in
-writing.
+You are done when every mark has a sort and every class has its covering
+rule, what failed, its search for opposite complaints and its home.
 
 ## Examples
 
 Correct: the owner marks a missing step number in two pull request reviews
 and one plan review. The rule says that step numbers "match the overview",
-and the build read that as allowing a step without a comment. The rule is
-unclear. The proposal rewords the one sentence, and its second choice is a
-script that checks the numbers. The search for the opposite complaint finds
-"the numbering is getting heavy", and the proposal says that the reworded
-sentence adds no numbers to a function that has none. Its home is katai,
-because the sentence holds for any repository.
+and the build read that as allowing a step without a comment. The record
+lists one class with the three marks, quotes the sentence, says that it is
+unclear, quotes the earlier "the numbering is getting heavy" as an opposite
+complaint, and names katai as its home. It proposes no new wording.
 
 Incorrect: the owner writes "too much prose" at three doc comments in one
-review. The proposal caps every comment at two lines and adds "most
-functions need none". It fails four requirements. One review is a place.
-The marks were about doc comments, and the cap reaches every comment. The
-sentence sets a quantity. The search would have found a dozen marks that
-ask for more comments at the lines. Or: a lesson about this repository's
-test command is proposed as a change to katai, so every repository would
-carry it.
+review, and the record lists a class with a proposed cap of two lines per
+comment. One review is a place, so the marks go under Places, and a record
+proposes no rule text. Or: the record leaves out the places because no
+class came of them, and the next unit's record cannot show that the same
+place recurred.

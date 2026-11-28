@@ -438,9 +438,10 @@ The build asks for no rule change during a review. When the owner writes
 that a rule changes now, it changes in this build, in a commit and a review
 chapter of its own, as `katai:workflow`, "Changing a rule", says: a tracked
 rule file of this repository on this branch; a sentence of the local note
-by an edit, shown in that chapter; a rule of katai on a rules branch of the
-katai clone, as the merge stage lands a katai lesson; a rule of the owner's
-own configuration by an edit, shown as a diff.
+by an edit, shown in that chapter; a rule of the owner's own configuration
+by an edit, shown as a diff. A rule of katai is not edited from here: the
+owner's words go into the lessons folder, as "Changing a rule" says for
+katai.
 
 An issue's build is over only when its pushed head is its reviewed head, or
 that head and the commits that apply the remarks of its approval, the owner

@@ -1,6 +1,6 @@
 ---
 name: merge
-description: Open the merge stage -- per pull request in landing order, land each one that GitHub would accept by the repository's merge style, carry it to the release lines its plan names, close or report its tracker item, delete the plan, close the milestone it completes, and after the last pull request of a unit run the postmortem and land the lessons the owner accepts. Invoked by the owner after reviewing the code; the invocation is the owner's yes on the code.
+description: Open the merge stage -- per pull request in landing order, land each one that GitHub would accept by the repository's merge style, carry it to the release lines its plan names, close or report its tracker item, delete the plan, close the milestone it completes, and after the last pull request of a unit run the postmortem and write its lessons record, which changes no rule. Invoked by the owner after reviewing the code; the invocation is the owner's yes on the code.
 disable-model-invocation: true
 argument-hint: "[item, pull request or branch ...]"
 allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"), Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/step_check_prs.py")
@@ -207,8 +207,7 @@ request its base branch belongs to):
 
 The stage posts, replies to and resolves nothing on GitHub in the owner's
 name beyond the merge itself, with the retargets and branch deletions it
-needs, the close of the pull request's item, and the rules pull requests of
-"Landing the lessons".
+needs, and the close of the pull request's item.
 
 ## The postmortem
 
@@ -220,66 +219,19 @@ pull request of this run, do this for each unit that this run completed:
 1. Load `katai:postmortem` through the Skill tool with the unit's slug,
    taken from the plans, as its argument, and no other word. The skill runs
    in a fork of its own, which has not seen this session and prints the
-   repository's state for itself. It returns the text of one message, or
-   one line that starts with `no class`.
-2. On `no class`, add that line to the closing lines below and ask nothing.
-3. Otherwise ask the owner with the text as it came, and end your turn until
-   the owner answers.
+   repository's state for itself. It returns the text of one lessons
+   record, or one line that starts with `no record`.
+2. On `no record`, add that line to the closing lines below.
+3. Otherwise write the text as it came into `<lessons>/<unit>.md`, where
+   `<lessons>` is the lessons folder of `katai:workflow`, "Lessons". Create
+   the folder where it does not exist. Where the file exists, from an
+   earlier run of this unit, replace it. Then delete `<unit>-asked.md`
+   there, whose entries the record now carries.
 
-## Landing the lessons
-
-Each proposal names its home, and the owner's answer may move it. Land what
-the owner accepted by its home.
-
-A rules pull request, in katai or in this repository, is a branch
-`rules-<unit>` with one commit per accepted proposal, each with the change
-to the decision records that `katai:workflow`, "Changing a rule", asks for,
-in the commit form of "Branches and commits" there. Its pull request has an
-empty body, through the skill that covers pull requests where one does,
-else with `gh pr create -B <base> -H rules-<unit> -t "<title>" -b ""`. Show
-it for review as step 1 of "The runs and the reviews" says in the build
-stage's `${CLAUDE_SKILL_DIR}/../build/SKILL.md`, and watch its CI as that
-file's step 11 does. It lands once the owner approves
-it, its remarks applied, its head is green, and GitHub would accept it.
-
-- katai. The change is stated in general words and quotes nothing from this
-  repository, no file name, no code and no one's remark, because katai is
-  public; the evidence stays with the review. The katai clone is the plugin
-  root, `${CLAUDE_SKILL_DIR}/../..`. Where it is no git clone
-  whose origin the owner can push to
-  (`gh api repos/<owner>/<repo> -q .permissions.push` for its origin), show
-  the accepted text to the owner instead. Otherwise cut the branch in a
-  temporary worktree of the clone, from the clone's default branch:
-
-  ```
-  git -C <clone> fetch origin
-  git -C <clone> symbolic-ref --short refs/remotes/origin/HEAD
-  git -C <clone> worktree add -b rules-<unit> <root>/worktrees/katai-rules-<unit> origin/<katai base>
-  ```
-
-  Commit there, with katai's records in its `doc/adr/`, push with
-  `git -C <worktree> push -u origin rules-<unit>`, and open the pull
-  request with `--repo` naming the clone's origin. It
-  lands by fast-forward, as katai's own `AGENTS.md` says its base moves:
-  `git -C <worktree> push origin <head sha>:<katai base>`. Then delete the
-  branch on origin, remove the worktree with
-  `git -C <clone> worktree remove <worktree>`, delete the local branch, and
-  run `git -C <clone> pull --ff-only`, which brings the change to every
-  session that loads katai from the clone.
-
-- This repository, where `owner: own`. A rules pull request against its
-  tracked files and its records, with the branch cut by
-  `git switch --no-track -c rules-<unit> origin/<base>` and pushed with
-  `git push -u origin rules-<unit>`. It lands by step 1 of this stage.
-- This repository, where `owner: shared`. Write the accepted sentence into
-  the local note and show it in the closing message. It gets no commit and
-  no record.
-- The owner's own configuration. Edit the accepted sentence into the file
-  the proposal names, and show the diff in the closing message.
-
-A rules pull request has no item, no plan and no postmortem. The owner's
-answer to a proposal is the owner's yes on its text. It is not the owner's
-yes on the commit, which is why the rules pull request gets its own review.
+Ask the owner nothing about the record, and change no rule file: not
+katai's, not this repository's instruction files, not the owner's own
+configuration. A rule changes only when the owner reads the records of
+several units together, as "Lessons" says.
 
 ## The closing lines
 
@@ -293,8 +245,8 @@ where step 6 read a milestone; then "plan deleted", or the rows that kept
 it; then the number of unresolved threads of other people; then who
 took each step, such as "merge: <skill>" or "tracker: gh issue close". Add
 one line per pull request that stopped, with the reason, and one line per
-postmortem: its `no class` line, or the number of proposals sent and where
-each accepted one landed.
+postmortem: its `no record` line, or the path of the record with its count
+of classes, places and decisions.
 
 Correct: `cache-expiry` (#20) and `cache-metrics` (#21, stacked on expiry)
 are green, GitHub would accept #20, and the step check shows 0 findings for
@@ -318,5 +270,6 @@ checkout to pick onto it, and the checkout fails because another worktree
 holds the line. Or: a colleague left two unresolved threads, and you
 resolve them before the merge. Or: you tell `katai:postmortem` which remarks
 you think matter, so the postmortem sorts them the way the session that
-built the code sees them. Or: the owner picks a proposal, and you commit the
-change to the base without a rules pull request and its review.
+built the code sees them. Or: the record names a class whose home is katai,
+and you edit katai's skills from this repository, or ask the owner whether
+to change the rule now.
