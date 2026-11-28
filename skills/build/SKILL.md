@@ -377,11 +377,13 @@ For each pull request:
      sentences: what changed. "You decided:" one line per owner decision
      the chapter rests on, the decision and the date, no argument.
      "Proposed by the build:" one line per proposal the chapter rests on,
-     the choice, the alternative that lost, why, and the line in the diff
-     that carries it; every proposal row of the plan appears under this
-     label in exactly one chapter. "Read closely:" one to three lines, each
-     naming a spot in the diff and what the comment or test there should
-     carry, so the owner's eye lands where the comments and the tests are
+     the choice, the alternative that lost, why, and the line that carries
+     it as `path:line` at the pushed head, because the overview takes no
+     remarks and the owner finds a name only by its place; every proposal
+     row of the plan appears under this label in exactly one chapter.
+     "Read closely:" one to three lines, each naming a spot as `path:line`
+     at the pushed head and what the comment or test there should carry,
+     so the owner's eye lands where the comments and the tests are
      judged; the cue aims, it does not judge. One decision per sentence,
      the decision before its reason.
    - The body names the pull request's URL and the head's SHA, because an
@@ -468,7 +470,9 @@ superseded heads.
 
 Incorrect: a chapter overview stacks six decisions in one paragraph, each
 with its defense, so the owner cannot tell which ones they made and asks
-"are you saying that...". Or: the owner approves a review and the
+"are you saying that...". Or: a proposal line says "the cap is 8, a
+guess" with no `path:line`, and the owner searches the diff for the cap's
+name and does not find it. Or: the owner approves a review and the
 build-stage message is posted while the runs are still going. Or: the expiry
 fix is pushed and the metrics review is shown on the old stack, so the
 owner reviews code that will never merge. Or: a run goes red, you fix it
