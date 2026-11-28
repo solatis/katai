@@ -104,7 +104,8 @@ fallbacks decide, so it gets a walkthrough.
 CORRECT:
 
 ```
-/// Whether alert `a` fires for listing `l`. It never raises on bad data.
+/// Decides whether alert `a` fires for listing `l`. It never raises on bad
+/// data.
 /// The fallbacks on `a` decide listings without a price and prices in an
 /// unknown currency.
 alert_fires(a, l) -> bool
@@ -360,8 +361,8 @@ func (c *Cache) Get(ctx context.Context, key string, opts ...GetOption) ([]byte,
 ```
 
 The first version tells callers how the shards and the circuit work, and each
-change to `Get` added a clause to it. The second version gives callers the
-contract and puts each reason at the line it explains. The facts about the
+change to `Get` added a clause to it. The second version tells callers what
+they need and puts each reason at the line it explains. The facts about the
 shards belong to the shard's own comments.
 
 ### A change, in Rust
@@ -369,7 +370,7 @@ shards belong to the shard's own comments.
 The code before the change:
 
 ```rust
-/// The discount on order `o`: 10 percent of its total.
+/// Returns the discount on order `o`: 10 percent of its total.
 fn discount(o: &Order) -> Money {
     // TODO(pricing): no discount on small orders.
     o.total / 10
@@ -379,8 +380,8 @@ fn discount(o: &Order) -> Money {
 The change adds a threshold. INCORRECT, the old comment patched:
 
 ```
-/// The discount on order `o`: 10 percent of its total, and now only for a
-/// total of 100 or more.
+/// Returns the discount on order `o`: 10 percent of its total, and now only
+/// for a total of 100 or more.
 fn discount(o: &Order) -> Money {
     // The threshold replaces the earlier discount on every order.
     if o.total < Money(100) {
@@ -394,8 +395,8 @@ fn discount(o: &Order) -> Money {
 CORRECT, the comment written from the new code:
 
 ```rust
-/// The discount on order `o`: 10 percent of a total of 100 or more, and
-/// nothing on a smaller total.
+/// Returns the discount on order `o`: 10 percent of a total of 100 or more,
+/// and nothing on a smaller total.
 fn discount(o: &Order) -> Money {
     if o.total < Money(100) {
         Money(0)
@@ -408,6 +409,78 @@ fn discount(o: &Order) -> Money {
 The patched version keeps the words about every order, adds "now", and
 explains the history in the body. The rewritten version reads as if the
 function had always had the threshold.
+
+### How much a comment says
+
+A comment can be short or long, and either can be right. These four cases
+show when.
+
+Short, and right. The line shows everything except where the number came
+from, and the comment says that.
+
+```python
+# The payment API blocks a client after six failed calls.
+MAX_RETRIES = 5
+```
+
+Long, and right. A caller cannot use this helper without knowing what happens
+to a call that arrives too early, so the doc comment says how it works and
+gives a case.
+
+```ts
+/**
+ * Calls `fn` at most once per `wait` milliseconds. A call that arrives
+ * during the wait is not dropped. The last one runs when the wait ends, so
+ * a search box still sends the final keystroke.
+ */
+function throttle<A extends unknown[]>(fn: (...args: A) => void, wait: number);
+```
+
+Short, and wrong. The comment has no verb, and it uses "quota", "tenant" and
+"plan" as if the reader knew how they relate.
+
+INCORRECT:
+
+```go
+// The quota of u as a tenant of the plan.
+func quota(u User) int {
+```
+
+CORRECT:
+
+```go
+// quota returns how many projects user u may create. The limit comes from
+// the plan of the user's tenant, and a tenant without a plan gets the free
+// limit.
+func quota(u User) int {
+```
+
+Long, and wrong. The comment repeats the query in words and leaves out what
+the query is for.
+
+INCORRECT:
+
+```sql
+-- Select the id and the email from users where active is true and
+-- created_at is more than 30 days ago, ordered by created_at descending,
+-- limited to 100 rows.
+SELECT id, email FROM users
+WHERE active AND created_at < now() - interval '30 days'
+ORDER BY created_at DESC LIMIT 100;
+```
+
+CORRECT:
+
+```sql
+-- Selects the accounts due for the 30-day follow-up mail, newest first.
+-- The mail provider accepts 100 mails per call.
+SELECT id, email FROM users
+WHERE active AND created_at < now() - interval '30 days'
+ORDER BY created_at DESC LIMIT 100;
+```
+
+A comment grows when the reader lacks a fact, and it shrinks when the code
+already shows the fact. The length of the code does not decide either.
 
 ## Applying it to existing code
 
@@ -453,7 +526,8 @@ function had always had the threshold.
         decision record
       - a citation of a decision record in a form other than the one rule 16
         of "Code comments" names
-      - an implementation detail in a doc comment
+      - an implementation detail in a doc comment that a caller does not
+        need
       - a rejected alternative that a reader of that line would not propose
       - a sentence that reads like one of the "Written" sentences in the
         table of "Prose" in `rules.md`
