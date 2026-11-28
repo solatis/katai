@@ -10,9 +10,10 @@ Each record has the same parts: `Date`, then Context, Decision, Rejected
 alternatives and Consequences. A part with nothing recorded says so.
 
 A change to a rule of weight in a skill writes or rewrites its record in the
-same commit, as "Changing a rule" in `skills/workflow/SKILL.md` asks.
+same commit, as "Changing a rule" in `skills/workflow/rule-changes.md` asks.
 
-| Record                                          | Decision                                                            |
-| ----------------------------------------------- | ------------------------------------------------------------------- |
-| [0001](0001-postmortem-records-lessons.md)      | The postmortem records lessons and changes no rule                  |
-| [0002](0002-comments-say-what-the-code-does.md) | Comments say what the code does, in the words a colleague would use |
+| Record                                          | Decision                                                                    |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
+| [0001](0001-postmortem-records-lessons.md)      | The postmortem records lessons and changes no rule                          |
+| [0002](0002-comments-say-what-the-code-does.md) | Comments say what the code does, in the words a colleague would use         |
+| [0003](0003-output-is-bounded-by-kind.md)       | A stage's output is bounded by kind, and messages for the owner stand alone |

@@ -12,10 +12,9 @@ not copy their wording or their semantics.
 ## Which level a function gets
 
 Each function gets one of three levels. Rule 2 of "Code comments" says when a
-function qualifies for each. A function that forwards, passes settings
-through or maps fields one to one is bare, whatever else is true of it. A
-constant in it still says where it came from. Test the other functions
-against the levels in this order, and the first that applies wins.
+function qualifies for each, which functions are bare whatever else is true
+of them, and that the first level that applies wins. The levels, in the
+order of the test:
 
 1. Walkthrough. The reader cannot see the function's plan at any single line.
    The function gets a doc comment, a walkthrough at the top of its body, one

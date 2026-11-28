@@ -1,6 +1,6 @@
 ---
 name: seed
-description: Seed one unit of work -- classify the sources by provenance, load the unit's context, shape each of its issues, put their design choices and the values asked once to the owner, and write the seed report. Loaded by katai:start and katai:start-next after they have fixed the unit; never invoked by the owner.
+description: Seeds one unit of katai work -- loads its context, puts its design choices to the owner and writes the seed report. Loaded by katai:start and katai:start-next after they have fixed the unit; never invoked by the owner.
 user-invocable: false
 ---
 

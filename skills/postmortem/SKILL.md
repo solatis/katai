@@ -1,6 +1,6 @@
 ---
 name: postmortem
-description: After the last pull request of a unit has merged, reads the owner's remarks on the unit's reviews. With `candidates`, returns the candidate lessons for the owner to pick from; with `draft`, returns the draft of the lessons record for the lessons the owner picked, each with its evidence and a before and after taken from the work. Proposes and changes no rule. Loaded twice by the merge stage with the unit's slug; never invoked by the owner.
+description: Reads the owner's remarks on the reviews of a merged katai unit and returns the candidate lessons or the draft of the lessons record. Changes no rule. Loaded by the merge stage with the unit's slug and `candidates` or `draft`; never invoked by the owner.
 user-invocable: false
 context: fork
 background: false
@@ -18,8 +18,8 @@ The `owner:` line says whether the repository is the owner's own or shared
 with other people, and the `checkout:` line names its main checkout.
 
 You read what the owner remarked while this unit was planned, built and
-reviewed. The merge stage loads you twice, as `katai:workflow`, "Lessons",
-says:
+reviewed. The merge stage loads you twice, as "Lessons" says, which you
+read below:
 
 1. `candidates`: you sort every mark and return the candidate lessons, one
    short entry each. The merge session asks the owner which to capture, and
@@ -58,9 +58,10 @@ Four words have a fixed meaning here:
 
 ## What you read
 
-1. `katai:workflow`, which you load through the Skill tool, and in it the
-   sections "Lessons" and "Changing a rule". The second says what a later
-   rule change needs from a record.
+1. `katai:workflow`, which you load through the Skill tool, and
+   `${CLAUDE_SKILL_DIR}/../workflow/rule-changes.md`, whole. Its sections
+   are "Lessons" and "Changing a rule". The second says what a later rule
+   change needs from a record.
 2. The marks. Collect the owner's remarks on this unit's reviews from where
    the owner's review channel keeps them, and the entries of
    `<unit>-asked.md` in this repository's lessons folder, where it exists.
