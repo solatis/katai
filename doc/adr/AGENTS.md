@@ -19,3 +19,4 @@ same commit, as "Changing a rule" in `skills/workflow/rule-changes.md` asks.
 | [0003](0003-output-is-bounded-by-kind.md)       | A stage's output is bounded by kind, and messages for the owner stand alone |
 | [0004](0004-one-frame-for-every-standard.md)    | One skill holds the frame of every standard, and one agent per stance reads |
 | [0005](0005-standards-for-code-and-tests.md)    | Code and tests have standards, and a test's kind is what it touches         |
+| [0006](0006-an-attacker-for-plan-and-build.md)  | An attacker tries to break the claims of each plan and each built change    |

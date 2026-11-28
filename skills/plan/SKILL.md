@@ -147,6 +147,24 @@ the stage only through that print.
    other plan's branch, and its commits assume only what the other plan's
    commits deliver.
 
+   Then attack each plan, before the other checks, because a finding of
+   the attacker changes the design that they would check:
+
+   ```
+   kt:attack-plan <plans folder>/<slug>-plan.md
+   ```
+
+   The call holds the plan's path and no other word. Save the answer
+   verbatim as `<slug>-plan-attack.md` in the plans folder. Close each
+   finding in one of three ways: a change to the plan, a question to the
+   owner, or a decline with the `path:line` or the Rationale row that
+   refutes the case. Append one line per finding to the file,
+   `<plan line> | changed`, `<plan line> | question` or
+   `<plan line> | declined: <reason>`. A decline without a line that
+   refutes the case is no decline. The attack runs once per plan, and
+   again after a redirect only when the redirect changes the Design, the
+   Rationale or the Tests part.
+
    Run the step check on each plan, with the base directory that the loaded
    `kt:standards` shows:
 
@@ -184,8 +202,9 @@ the stage only through that print.
 
    The body, per plan in landing order: one line saying what the issue
    delivers, one line with the last line of the plan's step check from step
-   5, one line per row of the plan's two audits that was declined, with the
-   rule and the reason, then three labeled lists. "Settled by you:" and "Proposed here:" are
+   5, one line per finding of the plan's attack with how it was closed, one
+   line per row of the plan's two audits that was declined, with the rule
+   and the reason, then three labeled lists. "Settled by you:" and "Proposed here:" are
    built from the plan's Rationale rows, every row in exactly one of them.
    - "Settled by you:" one line per owner row, the decision and the date,
      nothing else.

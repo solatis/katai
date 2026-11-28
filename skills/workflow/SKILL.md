@@ -288,8 +288,11 @@ channel ("Asking and reviews").
     stage deletes it once every plan of the unit is approved.
   - `<slug>-plan.md`, one plan per issue.
   - `<slug>-read-1.md`, `<slug>-read-2.md`, `<slug>-audit.md`,
-    `<slug>-audit-code.md` and `<slug>-audit-tests.md`, the build's check
-    files: the answers of its two cold reads and of its audits.
+    `<slug>-audit-code.md`, `<slug>-audit-tests.md` and
+    `<slug>-build-attack.md`, the build's check files: the answers of its
+    two cold reads, its audits and its attack.
+  - `<slug>-plan-attack.md`, the answer of the plan stage's attack on the
+    plan.
 - A plan starts with these header lines, in this order. They are how every
   stage finds an issue's item, unit, branch, base, title and state.
 

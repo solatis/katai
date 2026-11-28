@@ -2,8 +2,9 @@
 
 The session that owns a change runs these checks after its last code commit
 and before the change leaves the session. The checks run in the order of how
-much their fixes change. The audits of code and tests come first, because a
-row of theirs changes code. The checks of comments follow, because they
+much their fixes change. The attack comes first, because a finding of it changes
+what the code does. The audits of code and tests follow, because a row of
+theirs changes code. The checks of comments follow, because they
 read the code as it then is. Each check is a script's output or
 another agent's answer, and the session saves each answer where the stage
 says. `<base>` is the revision the change started from. `<base directory>` is
@@ -25,6 +26,15 @@ Where the stage printed `owner: own`, every check covers whole files.
   rewritten whole. A finding in it is listed under "Checks" in the
   review and left as it is. Rule 13 of `comments.md`, which
   rewrites a touched block whole, holds for the owner's own blocks.
+
+## The attack
+
+Before every other check, run `kt:attack-build <base>...HEAD`, with the
+range and no other word. The attacker reads the changed code and tests and
+what they say about themselves, and no plan. Save its answer verbatim. Close
+each finding in one of three ways: a fix with the test that pins it, a
+question to the owner, or a decline with the line of code or the test that
+refutes the case. The attack runs once.
 
 ## Code and tests
 
@@ -105,8 +115,8 @@ conversation. A comment that waits for an answer is written after it arrives.
 
 ## What the reviewer sees
 
-The review's "Checks" shows the rows of the code audit and the tests audit,
-each with how it was closed. It shows the last line of each step check, each
+The review's "Checks" shows the findings of the attack and the rows of the
+code audit and the tests audit, each with how it was closed. It shows the last line of each step check, each
 `skipped` line, every stop with its closure, every decline with its reason,
 each finding left in a block of another author, and the rows of the audit as
 applied or declined. Each stop gets one of these lines:

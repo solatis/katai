@@ -148,7 +148,27 @@ Then, issue by issue in landing order:
    with its kind. A fake of a subsystem that no Rationale row names is
    asked of the owner before the commit that needs it.
 
-   After the last code commit and before step 3, audit the code and the
+   After the last code commit, attack the built change, before every
+   other check, because a finding of the attacker changes code and tests
+   that the others would read:
+
+   ```
+   kt:attack-build <base>...HEAD
+   ```
+
+   The call holds the range and no other word, and the attacker reads no
+   plan. Save the answer verbatim as `<slug>-build-attack.md` in the plans
+   folder. Close each finding in one of three ways: a fix with the test
+   that pins it, in a commit that passes what this step asks of a commit;
+   a question to the owner; or a decline with the line of code or the test
+   that refutes the case. Append one line per finding to the file,
+   `<path>:<line> | fixed <sha>`, `<path>:<line> | question` or
+   `<path>:<line> | declined: <reason>`. A decline without a line that
+   refutes the case is no decline. A finding that only a design change
+   answers is a deviation from the plan and is asked of the owner. There
+   is no second attack.
+
+   Then, before step 3, audit the code and the
    tests, as "Code and tests" in `checks.md` says, each in a run of its
    own:
 
@@ -421,9 +441,12 @@ For each pull request:
      then each comment of another reviewer with the owner's answer and the
      commit that applied it.
    - Last in the body, a section "Checks", built from the files
-     `<slug>-audit-code.md`, `<slug>-audit-tests.md`, `<slug>-read-1.md`,
+     `<slug>-build-attack.md`, `<slug>-audit-code.md`,
+     `<slug>-audit-tests.md`, `<slug>-read-1.md`,
      `<slug>-read-2.md` and `<slug>-audit.md` and from a run of the step
      check of step 3 at the pushed head:
+     - every finding of the attack, with the case and how it was closed,
+       and the number of claims it lists under "Held"
      - the first line of the code audit and of the tests audit, which
        repeats the call, and each of their rows as applied, asked or
        declined with its reason, or the line that the run was skipped
