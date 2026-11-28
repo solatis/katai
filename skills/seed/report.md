@@ -11,7 +11,7 @@ everything the plans need.
 Each section is a markdown heading, `# Name`, on a line of its own with a
 blank line before and after it. Sections carry no numbers. A numbered list
 appears only where a section asks for one, and it starts at 1. The
-Candidates section belongs to `/katai:start-next` only; when its step did
+Candidates section belongs to `/kt:start-next` only; when its step did
 not run in this seed, it is omitted, not written as "none".
 
 - `# Where` -- first, one line naming the unit's slug, which names this
@@ -21,7 +21,7 @@ not run in this seed, it is omitted, not written as "none".
   supplied it, or `settled by owner, <date>` for a value asked once. The
   milestone this seed closed, if any, is a line here with its evidence. A
   line names which skill took each step so far, or says that none did.
-- `# Candidates` (`/katai:start-next` only) -- a table, one row per
+- `# Candidates` (`/kt:start-next` only) -- a table, one row per
   candidate, in the order they were offered:
   `| candidate | source (path or item) | tree check (landed / blocked / ready / not read) | verdict |`
   A candidate that the owner did not pick from a list of existing items is
@@ -44,7 +44,7 @@ not run in this seed, it is omitted, not written as "none".
   ```
 
   Each branch name was checked free in this clone and on origin, as
-  `katai:workflow`, "Names", says. Where a name carries the key of an item
+  `kt:workflow`, "Names", says. Where a name carries the key of an item
   that does not exist yet, the key's place stays open.
 
 - `# Decisions` -- a numbered list, one entry per design choice and per
@@ -118,5 +118,5 @@ the owner learns what ingestion does from the commit subjects. Or: the
 session runs in a linked worktree, and the orientation goes to the
 worktree's own `.claude/AGENTS.md`, where no later stage reads it.
 
-Then wait. The owner opens the plan stage with `/katai:plan`; nothing else
+Then wait. The owner opens the plan stage with `/kt:plan`; nothing else
 does.

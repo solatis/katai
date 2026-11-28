@@ -76,7 +76,7 @@ walkthrough, and notes at single lines.
    stop at it. The writer already knows what each line does and cannot see
    where a reader stops. It writes a note at each such construct whose
    effect neither a name nor the line itself states, and the cold reader of
-   `katai:doc-read` finds the lines that the writer missed. The note says
+   `kt:doc-read` finds the lines that the writer missed. The note says
    what the line achieves in the terms of the problem, or why the line is
    there. A note that repeats its line in other words is deleted, and so is a
    note that explains what a language feature does in general.
@@ -137,7 +137,7 @@ word owner and a comma. It reads the whole of each file it is given, prints
 one line per finding and ends with a line that counts them. It does not read
 block comments. It does not check whether a back-reference sits at the right
 line, whether a function that needs a walkthrough has one, or whether a
-comment is true. `katai:doc-read`, `katai:doc-audit` and the read-back cover
+comment is true. `kt:doc-read`, `kt:doc-audit` and the read-back cover
 those.
 
 ## Prose

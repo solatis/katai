@@ -13,7 +13,7 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py")
 # The postmortem of a unit
 
 The unit is `$0`, and the pass is `$1`. The lines above are what `repo_state.py` printed for this
-repository; read them as `katai:workflow`, "What the stage printed", says.
+repository; read them as `kt:workflow`, "What the stage printed", says.
 The `owner:` line says whether the repository is the owner's own or shared
 with other people, and the `checkout:` line names its main checkout.
 
@@ -58,7 +58,7 @@ Four words have a fixed meaning here:
 
 ## What you read
 
-1. `katai:workflow`, which you load through the Skill tool, and
+1. `kt:workflow`, which you load through the Skill tool, and
    `${CLAUDE_SKILL_DIR}/../workflow/rule-changes.md`, whole. Its sections
    are "Lessons" and "Changing a rule". The second says what a later rule
    change needs from a record.

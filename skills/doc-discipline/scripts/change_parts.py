@@ -178,7 +178,7 @@ def tracked_files(paths):
 
     Raises as `git` does, also for a path that names no tracked file.
     """
-    # One run of the script lists the parts, and `katai:doc-read` runs it again for
+    # One run of the script lists the parts, and `kt:doc-read` runs it again for
     # the spans of one part. git lists the files in path order whatever the
     # order of the arguments, so a part number means the same in both runs.
     names = git([
@@ -291,7 +291,7 @@ def parse_args(argv):
     p = Parser(prog="change_parts.py", allow_abbrev=False,
                description="List the parts of a change or of the files under paths, "
                            "or print the spans of part K.")
-    # The paths share one word, because `katai:doc-read` passes the script two
+    # The paths share one word, because `kt:doc-read` passes the script two
     # words, this one and the part number.
     p.add_argument("source", metavar="SOURCE", help="a range BASE...REV, or PATH[,PATH]...")
     p.add_argument("part", nargs="?", type=int, metavar="K")

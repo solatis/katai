@@ -2,7 +2,7 @@
 name: doc-audit
 description: Audits code and documents against the comment rules of katai and the documentation policy of the repository, and returns the changes they call for as rows of a report. The checks of the katai comment guide run it, and it changes no file.
 context: fork
-agent: katai:doc-reader
+agent: kt:doc-reader
 background: false
 user-invocable: false
 argument-hint: "<base>...HEAD | <path> [lines] [plan: <plan>] [focus: ...] [also: ...]"

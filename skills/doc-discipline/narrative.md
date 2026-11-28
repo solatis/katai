@@ -531,7 +531,7 @@ already shows the fact. The length of the code does not decide either.
       - a sentence that reads like one of the "Written" sentences in the
         table of "Prose" in `rules.md`
    3. Gaps. The session that wrote the code does not judge its own gaps,
-      because it already knows what each line does. It runs `katai:doc-read`
+      because it already knows what each line does. It runs `kt:doc-read`
       as `checks.md` says and closes each stop the reader lists. An audit
       lists each line where the reader would stop, and each function that
       qualifies for a walkthrough and has none, as a question under

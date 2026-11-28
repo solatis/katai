@@ -8,9 +8,9 @@ allowed-tools: Bash(python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py")
 
 !`python3 "${CLAUDE_PLUGIN_ROOT}/scripts/repo_state.py"`
 
-# /katai:start -- seed a unit
+# /kt:start -- seed a unit
 
-Load `katai:workflow` with the Skill tool before anything else. The lines
+Load `kt:workflow` with the Skill tool before anything else. The lines
 above are what the stage printed; read them as its "What the stage printed"
 says. Where they hold `no repository of its own`, `no main checkout (bare)`
 or `no GitHub origin`, say so and stop.
@@ -32,7 +32,7 @@ report, and on the first unit in a shared repository the orientation in the
 local note. You write no code, documents or plans, create no tracker items
 or branches, make no commits and delete nothing. This stage asks for no
 approval: the owner's answers to its questions are answers, and the seed
-report waits for `/katai:plan`.
+report waits for `/kt:plan`.
 
 ## What the argument is
 
@@ -64,35 +64,35 @@ for the first and the seed for the rest.
 
 From the printed lines, before any other read:
 
-- What is in flight, and the leftovers, as `katai:workflow`, "In flight and
+- What is in flight, and the leftovers, as `kt:workflow`, "In flight and
   leftovers", defines them. Each kind of leftover is one line with its
   count and its names, and a branch that another worktree holds is named
   with that worktree. Untracked files are no leftover. The seed puts these
   lines under Open questions and goes on.
 - Whether a skill in this session covers this repository's tracker, from
   the skill listing, and what the tracker evidence shows, as
-  `katai:workflow`, "Units and issues", reads it.
+  `kt:workflow`, "Units and issues", reads it.
 
 ## Steps
 
 1. For each plan or item in flight: Resume, below.
-2. For a description, or for items not started: load `katai:seed` with the
+2. For a description, or for items not started: load `kt:seed` with the
    Skill tool, with them as the unit. It reads each item, loads the context,
    puts the choices to the owner, writes the seed report and waits for
-   `/katai:plan`.
+   `/kt:plan`.
 
 An existing item named in the argument is the unit's issue. The seed reads
 it through the skill that covers the tracker, or with `gh issue view` for a
 GitHub issue. The seed report marks it `existing`, it keeps its own title,
 and the plan creates nothing for it. Its branch takes the issue's slug in
 the branch form that history shows, and the seed checks that the name is
-free in this clone and on origin, as `katai:workflow`, "Names", says.
+free in this clone and on origin, as `kt:workflow`, "Names", says.
 
 ## Resume
 
 For each plan or item in flight, read its plan's header lines, its branch
 and its pull request from the printed lines, and its stage from the table in
-`katai:workflow`, "In flight and leftovers". Read nothing more: the plan is
+`kt:workflow`, "In flight and leftovers". Read nothing more: the plan is
 the next stage's whole input and is not re-read here.
 
 When the argument holds only work in flight, reply with exactly three
@@ -121,10 +121,10 @@ line names, which is where the seed writes it.
 Correct: the argument is `#12`, the line for `retry-uploads-plan.md` says
 `Item: #12` and `Status: approved`, and no `branch:` line shows
 `retry-uploads`. You report the build stage waiting and name
-`/katai:build #12`.
+`/kt:build #12`.
 
-Incorrect: the same state, and you load `katai:seed`, put the plan's
-settled choices back to the owner, and wait for `/katai:plan`. Or: you list
+Incorrect: the same state, and you load `kt:seed`, put the plan's
+settled choices back to the owner, and wait for `/kt:plan`. Or: you list
 `retry-uploads` as a leftover because it is not the base. Or: the argument
 is "retry the uploads", a plan with `Unit: upload-retries` exists, and you
 seed a second unit without asking whether the words name that plan.

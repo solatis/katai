@@ -2,7 +2,7 @@
 name: doc-read
 description: Reads a change as someone who has not seen it and returns the places where that reader stops. The checks of the katai comment guide run it, and it changes no file.
 context: fork
-agent: katai:doc-reader
+agent: kt:doc-reader
 background: false
 user-invocable: false
 argument-hint: "<base>...HEAD <part> | <path>[,<path>]... <part>"

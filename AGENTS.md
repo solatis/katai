@@ -7,9 +7,9 @@ that change katai itself.
 ## Layout
 
 - `.claude-plugin/plugin.json` names the plugin. Its skills are typed
-  `/katai:<skill>`.
+  `/kt:<skill>`.
 - `.claude-plugin/marketplace.json` lists the plugin with `source: "./"`, so
-  that `claude plugin install katai --marketplace <clone>` installs it from a
+  that `claude plugin install kt --marketplace <clone>` installs it from a
   clone and loads it from there.
 - `skills/` holds one folder per skill. `start`, `start-next`, `plan`, `build`
   and `merge` are the commands the owner types. `workflow`, `seed`,

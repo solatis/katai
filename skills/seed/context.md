@@ -65,16 +65,16 @@ Where section shows each with its source, so that a wrong reading meets the
 owner before any plan is written. Gather them now:
 
 - The checkout, main or linked, and `owner:` own or shared, which decides
-  the repository's instruction file (`katai:workflow`, "Own and shared").
+  the repository's instruction file (`kt:workflow`, "Own and shared").
 - The base: the `base:` line, or a base the instruction files name for
   this work.
 - The merge style: the `merge:` line.
 - The forms of the names: the `recent:` lines, the instruction files, and
-  the skill that covers the tracker (`katai:workflow`, "Names").
+  the skill that covers the tracker (`kt:workflow`, "Names").
 - The tracker and how items are made: the skill that covers it, or the
-  tracker evidence (`katai:workflow`, "Units and issues").
+  tracker evidence (`kt:workflow`, "Units and issues").
 - CI: the `ci:` line, or the skill that covers CI.
-- The checks each commit runs (`katai:workflow`, "Branches and commits").
+- The checks each commit runs (`kt:workflow`, "Branches and commits").
   Under a fast-forward they are the build, lint and test commands the
   instruction files name. Under a squash they are what the instruction
   files name to run for a change, such as a format command or a build of
