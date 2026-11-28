@@ -17,14 +17,28 @@ back. And the merge stage runs in the repository the unit was built in, not
 in katai, so a katai lesson landed from there edits katai from a session
 that has no business changing it.
 
+A record written straight from the postmortem has a third problem: it
+carries every mark at one weight. The agent cannot tell a remark that
+matters for the units to come from a passing one, and a batch reading of
+many such records drowns the first in the second.
+
 ## Decision
 
-The postmortem returns a lessons record and the merge stage writes it to
-`~/.local/state/katai/lessons/github.com/<owner>/<repo>/<unit>.md`. A record
-holds every mark with its sort, and for each class the rule sentence that
-covers it, what failed, the earlier opposite complaints and its home. It
-holds no proposed rule text, and the merge stage asks the owner nothing
-about it.
+The postmortem runs in two passes. The first sorts every mark and returns
+the candidate lessons, a class or a place each, with a one-sentence
+assessment. The merge stage asks the owner which to capture, as one
+checklist with no recommendation and nothing picked in advance, and the
+owner may correct an assessment in words.
+
+The second pass drafts the record from the owner's pick. Each picked lesson
+holds its evidence and a before and after: the marked excerpt at the
+reviewed head and the same excerpt after the commit that answered it. A
+picked class also holds the rule sentence that covers it, what failed, the
+earlier opposite complaints and its home. A lesson not picked is one line.
+The draft holds no proposed rule text. The merge stage shows it for review,
+and writes the approved draft to
+`~/.local/state/katai/lessons/github.com/<owner>/<repo>/<unit>.md`. It asks
+nothing about rules.
 
 No stage turns a record into a rule change. The owner reads the records of
 several units together and changes a rule where a class shows across them,
@@ -44,11 +58,24 @@ folder and the postmortem carries it into the record.
   from one unit anchors the later batch reading on that unit's view.
 - A stage that reads the records and proposes a batch. Not built yet; the
   owner reads the folder by hand for now.
+- Write the record uncurated and let the batch reading weigh it. Rejected:
+  the reader of a batch no longer remembers which remark mattered, and the
+  owner who made it does, at the end of the unit.
+- Draft every lesson in full and let the owner keep or drop each one.
+  Rejected: the owner would review the before and after of lessons that do
+  not matter, which is the noise the pick removes, and the work of taking
+  them is spent for nothing.
+- Drop the lessons the owner does not pick. Rejected: a minor
+  place that recurs in later units is the evidence of a class, and one line
+  keeps it at little noise.
+- Let the postmortem propose a pick. Rejected: a weight shown first is the
+  weight the owner starts from.
 
 ## Consequences
 
 - A merge no longer ends with questions about rules, and no rules pull
-  request comes out of a merge.
+  request comes out of a merge. It ends with a checklist of lessons and a
+  review of the draft, and the record waits until the owner approves it.
 - Lessons wait in the folder until the owner reads them, so a defect may
   recur for a few units before its rule changes.
 - Records may quote private repositories; they stay on the machine, and a
